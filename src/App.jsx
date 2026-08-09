@@ -19,6 +19,7 @@ import AdminDashboard from "./Pages/AdminDashboard";
 import RestaurantDashboard from "./Pages/RestaurantDashboard";
 import RestaurantDetails from "./Pages/RestaurantDetails";
 import GetAllRestaurants from "./Pages/GetAllRestaurant";
+import ErrorPage from "./Pages/ErrorPage";
 
 const router = createBrowserRouter([
   {
@@ -67,6 +68,10 @@ const router = createBrowserRouter([
   {
     path: "/login",
     element: <Login />,
+  },
+  {
+    path: "*",
+    element: <ErrorPage />,
   },
 ]);
 
