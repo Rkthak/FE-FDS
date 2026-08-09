@@ -54,19 +54,37 @@ const Navbar = () => {
             Restaurants
           </Link>
 
-          <Link
-            to="/favorites"
-            className="font-body text-sm font-semibold text-text-primary transition hover:text-primary-500"
-          >
-            Favorites
-          </Link>
-
-          <Link
-            to="/orders"
-            className="font-body text-sm font-semibold text-text-primary transition hover:text-primary-500"
-          >
-            My Orders
-          </Link>
+          {user ? (
+            <>
+              <Link
+                to="/favorites"
+                className="font-body text-sm font-semibold text-text-primary transition hover:text-primary-500"
+              >
+                Favorites
+              </Link>
+              <Link
+                to="/orders"
+                className="font-body text-sm font-semibold text-text-primary transition hover:text-primary-500"
+              >
+                My Orders
+              </Link>
+            </>
+          ) : (
+            <>
+              <Link
+                to="/about"
+                className="font-body text-sm font-semibold text-text-primary transition hover:text-primary-500"
+              >
+                About us
+              </Link>
+              <Link
+                to="/restaurant-register"
+                className="font-body text-sm font-semibold text-text-primary transition hover:text-primary-500"
+              >
+                Register Your Restaurant
+              </Link>
+            </>
+          )}
         </div>
 
         {/* ================= RIGHT SIDE ================= */}
