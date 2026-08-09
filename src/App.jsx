@@ -17,6 +17,7 @@ import {
 } from "./Loaders/roleLoader";
 import AdminDashboard from "./Pages/AdminDashboard";
 import RestaurantDashboard from "./Pages/RestaurantDashboard";
+import RestaurantDetails from "./Pages/RestaurantDetails";
 
 const router = createBrowserRouter([
   {
@@ -47,6 +48,10 @@ const router = createBrowserRouter([
         path: "/restaurant/dashboard",
         element: <RestaurantDashboard />,
         loader: restaurantrLoader,
+      },
+      {
+        path: "/restaurant/:slugID",
+        element: <RestaurantDetails />,
       },
     ],
   },
