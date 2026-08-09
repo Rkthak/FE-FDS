@@ -20,3 +20,24 @@ export const logoutUser = async () => {
   const response = await protectedInstance.post("/auth/logout");
   return response.data;
 };
+
+export const updateProfile = async (userData) => {
+  const response = await protectedInstance.put("/auth/profile", userData);
+
+  return response.data;
+};
+
+export const updateProfilePicture = async (imageFile) => {
+  const formData = new FormData();
+
+  formData.append("profileImage", imageFile);
+
+  console.log("FILE BEING SENT:", imageFile);
+  console.log("FORM DATA:", formData.get("profileImage"));
+
+  const response = await protectedInstance.put(
+    "/auth/upload-profileImage",
+    formData,
+  );
+  return response.data;
+};

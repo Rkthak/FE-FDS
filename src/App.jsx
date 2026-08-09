@@ -7,6 +7,7 @@ import store from "./Redux/store";
 import Home from "./Pages/Home";
 import authInitLoader from "./Loaders/authInitLoader";
 import MainLayout from "./Layout/MainLayout";
+import UserProfile from "./Pages/UserProfile";
 
 const router = createBrowserRouter([
   {
@@ -17,6 +18,10 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <Home />,
+      },
+      {
+        path: "profile",
+        element: <UserProfile />,
       },
     ],
   },
