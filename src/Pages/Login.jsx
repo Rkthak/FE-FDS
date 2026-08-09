@@ -1,7 +1,45 @@
 import { useState } from "react";
+import { loginUser } from "../Services/authService";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router";
+import { useDispatch } from "react-redux";
+import { setUser } from "../Redux/authSlice";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
+
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
+
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+
+    try {
+      const userData = {
+        email: formData.email.toLowerCase(),
+        password: formData.password,
+      };
+
+      const response = await loginUser(userData);
+      toast.success(response.message);
+
+      dispatch(setUser(response.user));
+
+      navigate("/");
+    } catch (error) {
+      const errorMessage =
+        error.response?.data?.message ||
+        error.message ||
+        "Registration failed. Please try again...";
+
+      toast.error(errorMessage);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-background flex items-center justify-center p-4">
@@ -82,7 +120,7 @@ const Login = () => {
             </p>
 
             {/* Form */}
-            <form className="mt-8 space-y-5">
+            <form className="mt-8 space-y-5" onSubmit={handleLogin}>
               {/* Email */}
               <div>
                 <label className="block text-sm font-medium text-text-primary mb-2 font-body">
@@ -93,6 +131,10 @@ const Login = () => {
                   type="email"
                   placeholder="you@example.com"
                   className="w-full px-4 py-3 rounded-xl border border-border bg-background text-text-primary font-logo font-medium placeholder:text-text-muted outline-none transition focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10"
+                  value={formData.email}
+                  onChange={(e) =>
+                    setFormData({ ...formData, email: e.target.value })
+                  }
                 />
               </div>
 
@@ -116,6 +158,10 @@ const Login = () => {
                     type={showPassword ? "text" : "password"}
                     placeholder="Enter your password"
                     className="w-full px-4 py-3 pr-20 rounded-xl border border-border font-logo font-medium bg-background text-text-primary placeholder:text-text-muted outline-none transition focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10"
+                    value={formData.password}
+                    onChange={(e) =>
+                      setFormData({ ...formData, password: e.target.value })
+                    }
                   />
 
                   <button
