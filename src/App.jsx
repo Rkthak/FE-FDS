@@ -8,6 +8,15 @@ import Home from "./Pages/Home";
 import authInitLoader from "./Loaders/authInitLoader";
 import MainLayout from "./Layout/MainLayout";
 import UserProfile from "./Pages/UserProfile";
+import authLoader from "./Loaders/authLoader";
+import UserDashboard from "./Pages/UserDashboard";
+import {
+  adminLoader,
+  restaurantrLoader,
+  userLoader,
+} from "./Loaders/roleLoader";
+import AdminDashboard from "./Pages/AdminDashboard";
+import RestaurantDashboard from "./Pages/RestaurantDashboard";
 
 const router = createBrowserRouter([
   {
@@ -22,6 +31,22 @@ const router = createBrowserRouter([
       {
         path: "profile",
         element: <UserProfile />,
+        loader: authLoader,
+      },
+      {
+        path: "/dashboard",
+        element: <UserDashboard />,
+        loader: userLoader,
+      },
+      {
+        path: "/admin/dashboard",
+        element: <AdminDashboard />,
+        loader: adminLoader,
+      },
+      {
+        path: "/restaurant/dashboard",
+        element: <RestaurantDashboard />,
+        loader: restaurantrLoader,
       },
     ],
   },
@@ -42,7 +67,7 @@ const App = () => {
         <RouterProvider router={router} />{" "}
         <ToastContainer
           position="top-right"
-          autoClose={3000}
+          autoClose={2000}
           hideProgressBar={false}
           newestOnTop={false}
           closeOnClick

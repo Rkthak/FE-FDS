@@ -144,6 +144,18 @@ const Navbar = () => {
                   </p>
                 </div>
 
+                {/* dashboard */}
+                <Link
+                  to={
+                    user.role === "user"
+                      ? "/dashboard"
+                      : `${user.role}/dashboard`
+                  }
+                  className="mt-2 flex items-center gap-3 rounded-xl px-3 py-2.5 font-body text-sm font-medium text-text-primary transition hover:bg-primary-50 hover:text-primary-500"
+                >
+                  <span className="text-lg">👤</span>
+                  DashBoard
+                </Link>
                 {/* Edit Profile */}
                 <Link
                   to="/profile"
