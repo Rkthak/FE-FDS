@@ -41,3 +41,8 @@ export const updateProfilePicture = async (imageFile) => {
   );
   return response.data;
 };
+
+export const deleteProfile = async () => {
+  const response = await protectedInstance.delete("/auth/me");
+  return response.data;
+};

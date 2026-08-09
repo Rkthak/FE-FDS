@@ -1,9 +1,14 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { updateProfile, updateProfilePicture } from "../Services/authService";
-import { setUser } from "../Redux/authSlice";
+import {
+  deleteProfile,
+  updateProfile,
+  updateProfilePicture,
+} from "../Services/authService";
+import { clearUser, setUser } from "../Redux/authSlice";
 import { toast } from "react-toastify";
 import { getImageUrl } from "../Services/getImage";
+import { useNavigate } from "react-router";
 
 const Profile = () => {
   const { user } = useSelector((state) => state.auth);
@@ -93,6 +98,40 @@ const Profile = () => {
       toast.error(error.response?.data?.message || "Failed to update profile");
     } finally {
       setSaving(false);
+    }
+  };
+
+  const navigate = useNavigate();
+
+  const [deleting, setDeleting] = useState(false);
+
+  const handleDeleteProfile = async () => {
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete your account? This action cannot be undone.",
+    );
+
+    if (!confirmDelete) return;
+
+    try {
+      setDeleting(true);
+
+      const response = await deleteProfile();
+
+      console.log("DELETE PROFILE:", response);
+
+      // Redux se user remove
+      dispatch(clearUser());
+
+      toast.success("Account deleted successfully");
+
+      // Login page par bhejo
+      navigate("/register");
+    } catch (error) {
+      console.error("DELETE PROFILE ERROR:", error);
+
+      toast.error(error.response?.data?.message || "Failed to delete account");
+    } finally {
+      setDeleting(false);
     }
   };
 
@@ -400,6 +439,25 @@ const Profile = () => {
               </div>
             </form>
           </div>
+        </div>
+        <div className="mt-10 rounded-2xl border border-red-200 bg-red-50 p-6">
+          <h3 className="font-heading text-lg font-bold text-red-600">
+            Danger Zone
+          </h3>
+
+          <p className="mt-2 font-body text-sm text-red-500">
+            Deleting your account is permanent. All your account data will be
+            removed.
+          </p>
+
+          <button
+            type="button"
+            onClick={handleDeleteProfile}
+            disabled={deleting}
+            className="mt-4 rounded-xl bg-red-600 px-5 py-2.5 font-body text-sm font-semibold text-white transition hover:bg-red-700"
+          >
+            Delete Account
+          </button>
         </div>
       </div>
     </div>
