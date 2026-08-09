@@ -4,7 +4,7 @@ import {
   getRestaurantBySlug,
   getRestaurantMenus,
 } from "../Services/restaurant";
-import { getImageUrl } from "../Services/getImage";
+import { getImageUrl } from "../Services/helper";
 
 const RestaurantDetails = () => {
   const { slugID } = useParams();

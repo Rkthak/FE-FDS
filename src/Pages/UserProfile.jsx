@@ -7,7 +7,7 @@ import {
 } from "../Services/authService";
 import { clearUser, setUser } from "../Redux/authSlice";
 import { toast } from "react-toastify";
-import { getImageUrl } from "../Services/getImage";
+import { getImageUrl } from "../Services/helper";
 import { useNavigate } from "react-router";
 
 const Profile = () => {

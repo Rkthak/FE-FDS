@@ -18,6 +18,7 @@ import {
 import AdminDashboard from "./Pages/AdminDashboard";
 import RestaurantDashboard from "./Pages/RestaurantDashboard";
 import RestaurantDetails from "./Pages/RestaurantDetails";
+import GetAllRestaurants from "./Pages/GetAllRestaurant";
 
 const router = createBrowserRouter([
   {
@@ -48,6 +49,10 @@ const router = createBrowserRouter([
         path: "/restaurant/dashboard",
         element: <RestaurantDashboard />,
         loader: restaurantrLoader,
+      },
+      {
+        path: "/restaurants",
+        element: <GetAllRestaurants />,
       },
       {
         path: "/restaurant/:slugID",
