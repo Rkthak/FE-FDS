@@ -21,6 +21,7 @@ import RestaurantDetails from "./Pages/RestaurantDetails";
 import GetAllRestaurants from "./Pages/GetAllRestaurant";
 import ErrorPage from "./Pages/ErrorPage";
 import Cart from "./Pages/Cart";
+import Favorites from "./Pages/Favorites";
 
 const router = createBrowserRouter([
   {
@@ -40,6 +41,11 @@ const router = createBrowserRouter([
       {
         path: "/cart",
         element: <Cart />,
+        loader: authLoader,
+      },
+      {
+        path: "/favorites",
+        element: <Favorites />,
         loader: authLoader,
       },
       {
