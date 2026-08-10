@@ -78,12 +78,6 @@ const Navbar = () => {
           ) : (
             <>
               <Link
-                to="/about"
-                className="font-body text-sm font-semibold text-text-primary transition hover:text-primary-500"
-              >
-                About us
-              </Link>
-              <Link
                 to="/restaurant-register"
                 className="font-body text-sm font-semibold text-text-primary transition hover:text-primary-500"
               >
@@ -269,21 +263,34 @@ const Navbar = () => {
             <span className="ml-1">Restaurants</span>
           </Link>
 
-          <Link
-            to="/favorites"
-            className="text-xs font-semibold text-text-secondary hover:text-primary-500"
-          >
-            ❤️
-            <span className="ml-1">Favorites</span>
-          </Link>
-
-          <Link
-            to="/orders"
-            className="text-xs font-semibold text-text-secondary hover:text-primary-500"
-          >
-            📦
-            <span className="ml-1">Orders</span>
-          </Link>
+          {user ? (
+            <>
+              <Link
+                to="/restaurants"
+                className="text-xs font-semibold text-text-secondary hover:text-primary-500"
+              >
+                🍽️
+                <span className="ml-1">Favorites</span>
+              </Link>
+              <Link
+                to="/restaurants"
+                className="text-xs font-semibold text-text-secondary hover:text-primary-500"
+              >
+                🍽️
+                <span className="ml-1">My Orders</span>
+              </Link>
+            </>
+          ) : (
+            <>
+              <Link
+                to="/restaurants"
+                className="text-xs font-semibold text-text-secondary hover:text-primary-500"
+              >
+                🏨
+                <span className="ml-1">Register Your Restaurant</span>
+              </Link>
+            </>
+          )}
         </div>
       </div>
     </nav>
