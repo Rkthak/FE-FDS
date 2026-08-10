@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import {
   getRestaurantBySlug,
   getRestaurantMenus,
@@ -8,6 +8,7 @@ import { getImageUrl } from "../Services/helper";
 
 const RestaurantDetails = () => {
   const { slugID } = useParams();
+  const navigate = useNavigate();
 
   const [restaurant, setRestaurant] = useState(null);
   const [menus, setMenus] = useState([]);
@@ -29,13 +30,17 @@ const RestaurantDetails = () => {
         setMenus(menuResponse.data.menus || []);
       } catch (error) {
         setError(error.response?.data?.message || "Failed to load restaurant");
+        if (error.response?.status === 404) {
+          navigate("/404");
+          return;
+        }
       } finally {
         setLoading(false);
       }
     };
 
     fetchRestaurant();
-  }, [slugID]);
+  }, [slugID, navigate]);
 
   if (loading) {
     return (
