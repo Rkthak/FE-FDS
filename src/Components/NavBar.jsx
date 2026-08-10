@@ -171,17 +171,23 @@ const Navbar = () => {
                 </div>
 
                 {/* dashboard */}
-                <Link
-                  to={
-                    user.role === "user"
-                      ? "/dashboard"
-                      : `${user.role}/dashboard`
-                  }
-                  className="mt-2 flex items-center gap-3 rounded-xl px-3 py-2.5 font-body text-sm font-medium text-text-primary transition hover:bg-primary-50 hover:text-primary-500"
-                >
-                  <span className="text-lg">👤</span>
-                  DashBoard
-                </Link>
+                {user?.role === "admin" && (
+                  <Link
+                    to="/admin/dashboard"
+                    className="mt-2 block rounded-lg px-3 py-2 text-sm hover:bg-primary-50"
+                  >
+                    ⚙️ Dashboard
+                  </Link>
+                )}
+
+                {user?.role === "restaurant" && (
+                  <Link
+                    to="/restaurant/dashboard"
+                    className="mt-2 block rounded-lg px-3 py-2 text-sm hover:bg-primary-50"
+                  >
+                    🏪 Dashboard
+                  </Link>
+                )}
                 {/* Edit Profile */}
                 <Link
                   to="/profile"
