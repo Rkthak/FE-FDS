@@ -9,6 +9,12 @@ const Navbar = () => {
   const dispatch = useDispatch();
 
   const { user, isAuthenticated } = useSelector((state) => state.auth);
+  const { cart } = useSelector((state) => state.cart);
+
+  const cartCount =
+    cart?.items?.reduce((total, item) => total + item.quantity, 0) || 0;
+
+  const displayCartCount = cartCount > 9 ? "9+" : cartCount;
 
   const handleLogout = async () => {
     try {
@@ -104,9 +110,11 @@ const Navbar = () => {
             className="relative flex h-10 w-10 items-center justify-center rounded-xl border border-border bg-background text-lg transition hover:border-primary-500 hover:text-primary-500"
           >
             🛒
-            <span className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-primary-500 px-1 text-xs font-bold text-text-white">
-              0
-            </span>
+            {cartCount > 0 && (
+              <span className="absolute -right-2.5 -top-3 flex h-6 min-w-6 items-center justify-center rounded-full bg-primary-500 px-1.5 text-xs font-bold text-white">
+                {displayCartCount}
+              </span>
+            )}
           </button>
 
           {/* ================= AUTH ================= */}

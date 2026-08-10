@@ -20,6 +20,7 @@ import RestaurantDashboard from "./Pages/RestaurantDashboard";
 import RestaurantDetails from "./Pages/RestaurantDetails";
 import GetAllRestaurants from "./Pages/GetAllRestaurant";
 import ErrorPage from "./Pages/ErrorPage";
+import Cart from "./Pages/Cart";
 
 const router = createBrowserRouter([
   {
@@ -34,6 +35,11 @@ const router = createBrowserRouter([
       {
         path: "profile",
         element: <UserProfile />,
+        loader: authLoader,
+      },
+      {
+        path: "/cart",
+        element: <Cart />,
         loader: authLoader,
       },
       {

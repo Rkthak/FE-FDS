@@ -5,10 +5,15 @@ import {
   getRestaurantMenus,
 } from "../Services/restaurant";
 import { getImageUrl } from "../Services/helper";
+import { useDispatch } from "react-redux";
+import { setCart } from "../redux/cartSlice";
+import { addToCart } from "../Services/cartService";
+import { toast } from "react-toastify";
 
 const RestaurantDetails = () => {
   const { slugID } = useParams();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const [restaurant, setRestaurant] = useState(null);
   const [menus, setMenus] = useState([]);
@@ -65,6 +70,24 @@ const RestaurantDetails = () => {
       </div>
     );
   }
+
+  // ADD IN CART
+
+  const handleAddToCart = async (menuID) => {
+    try {
+      const response = await addToCart(menuID, 1);
+
+      dispatch(setCart(response.cart));
+
+      toast.success("Item added to cart");
+    } catch (error) {
+      console.error("Add to cart error:", error);
+
+      toast.error(
+        error.response?.data?.message || "Failed to add item to cart",
+      );
+    }
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -251,6 +274,7 @@ const RestaurantDetails = () => {
 
                     <button
                       type="button"
+                      onClick={() => handleAddToCart(menu._id)}
                       disabled={!menu.isAvailable}
                       className="rounded-xl bg-primary-500 px-4 py-2 font-body text-sm font-semibold text-white transition hover:bg-primary-600 disabled:cursor-not-allowed disabled:bg-gray-300"
                     >
