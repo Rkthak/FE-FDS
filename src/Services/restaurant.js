@@ -2,7 +2,6 @@ import publicInstance from "../Instances/publicInstance";
 
 export const getAllRestaurant = async () => {
   const response = await publicInstance.get("/restaurant");
-  console.log(response);
 
   return response.data;
 };

@@ -10,6 +10,7 @@ import {
   removeCartItem,
   updateCartItem,
 } from "../Services/cartService";
+import { getImageUrl } from "../Services/helper";
 
 const Cart = () => {
   const dispatch = useDispatch();
@@ -18,19 +19,6 @@ const Cart = () => {
 
   const [loading, setLoading] = useState(true);
   const [updatingItem, setUpdatingItem] = useState(null);
-
-  // Image URL
-  const getImageUrl = (image) => {
-    if (!image) return "";
-
-    if (image.startsWith("http")) {
-      return image;
-    }
-
-    return `http://localhost:5000/${image
-      .replace(/\\/g, "/")
-      .replace(/^\/+/, "")}`;
-  };
 
   // Get cart
   useEffect(() => {
@@ -42,8 +30,6 @@ const Cart = () => {
 
         dispatch(setCart(response));
       } catch (error) {
-        console.error("Cart error:", error);
-
         // Backend empty cart par 404 bhej raha hai
         if (error.response?.status === 404) {
           dispatch(setCart(null));

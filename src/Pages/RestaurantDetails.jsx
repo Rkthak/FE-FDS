@@ -103,8 +103,6 @@ const RestaurantDetails = () => {
 
         const menuResponse = await getRestaurantMenus(response.data._id);
 
-        console.log("menu", menuResponse);
-
         setRestaurant(response.data);
 
         setMenus(menuResponse.data.menus || []);

@@ -73,8 +73,6 @@ const Profile = () => {
         },
       };
 
-      console.log("Sending:", userData);
-
       const profileResponse = await updateProfile(userData);
 
       let updatedUser = profileResponse.user;
@@ -82,8 +80,6 @@ const Profile = () => {
       // 2️⃣ Profile image upload
       if (selectedImage) {
         const imageResponse = await updateProfilePicture(selectedImage);
-
-        console.log("IMAGE RESPONSE:", imageResponse);
 
         updatedUser = imageResponse.user;
       }
@@ -93,8 +89,6 @@ const Profile = () => {
 
       toast.success("Profile updated successfully");
     } catch (error) {
-      console.error("UPDATE PROFILE ERROR:", error);
-
       toast.error(error.response?.data?.message || "Failed to update profile");
     } finally {
       setSaving(false);
@@ -117,18 +111,14 @@ const Profile = () => {
 
       const response = await deleteProfile();
 
-      console.log("DELETE PROFILE:", response);
-
       // Redux se user remove
       dispatch(clearUser());
 
-      toast.success("Account deleted successfully");
+      toast.success(response.message || "Account deleted successfully");
 
       // Login page par bhejo
       navigate("/register");
     } catch (error) {
-      console.error("DELETE PROFILE ERROR:", error);
-
       toast.error(error.response?.data?.message || "Failed to delete account");
     } finally {
       setDeleting(false);
