@@ -9,12 +9,7 @@ import authInitLoader from "./Loaders/authInitLoader";
 import MainLayout from "./Layout/MainLayout";
 import UserProfile from "./Pages/UserProfile";
 import authLoader from "./Loaders/authLoader";
-import UserDashboard from "./Pages/UserDashboard";
-import {
-  adminLoader,
-  restaurantrLoader,
-  userLoader,
-} from "./Loaders/roleLoader";
+import { adminLoader, restaurantrLoader } from "./Loaders/roleLoader";
 import AdminDashboard from "./Pages/AdminDashboard";
 import RestaurantDashboard from "./Pages/RestaurantDashboard";
 import RestaurantDetails from "./Pages/RestaurantDetails";
@@ -22,6 +17,7 @@ import GetAllRestaurants from "./Pages/GetAllRestaurant";
 import ErrorPage from "./Pages/ErrorPage";
 import Cart from "./Pages/Cart";
 import Favorites from "./Pages/Favorites";
+import HydrateFallback from "./Components/HydratedFallBack";
 
 const router = createBrowserRouter([
   {
@@ -37,31 +33,31 @@ const router = createBrowserRouter([
         path: "profile",
         element: <UserProfile />,
         loader: authLoader,
+        hydrateFallbackElement: <HydrateFallback />,
       },
       {
         path: "/cart",
         element: <Cart />,
         loader: authLoader,
+        hydrateFallbackElement: <HydrateFallback />,
       },
       {
         path: "/favorites",
         element: <Favorites />,
         loader: authLoader,
-      },
-      {
-        path: "/dashboard",
-        element: <UserDashboard />,
-        loader: userLoader,
+        hydrateFallbackElement: <HydrateFallback />,
       },
       {
         path: "/admin/dashboard",
         element: <AdminDashboard />,
         loader: adminLoader,
+        hydrateFallbackElement: <HydrateFallback />,
       },
       {
         path: "/restaurant/dashboard",
         element: <RestaurantDashboard />,
         loader: restaurantrLoader,
+        hydrateFallbackElement: <HydrateFallback />,
       },
       {
         path: "/restaurants",
