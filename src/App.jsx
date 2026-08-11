@@ -18,16 +18,21 @@ import ErrorPage from "./Pages/ErrorPage";
 import Cart from "./Pages/Cart";
 import Favorites from "./Pages/Favorites";
 import HydrateFallback from "./Components/HydratedFallBack";
+import MyOrders from "./Pages/Order";
+import Checkout from "./Pages/CheckOut";
+import OrderDetails from "./Pages/OrderDetails";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <MainLayout />,
     loader: authInitLoader,
+    hydrateFallbackElement: <HydrateFallback />,
     children: [
       {
         index: true,
         element: <Home />,
+        hydrateFallbackElement: <HydrateFallback />,
       },
       {
         path: "profile",
@@ -48,6 +53,24 @@ const router = createBrowserRouter([
         hydrateFallbackElement: <HydrateFallback />,
       },
       {
+        path: "/orders",
+        element: <MyOrders />,
+        loader: authLoader,
+        hydrateFallbackElement: <HydrateFallback />,
+      },
+      {
+        path: "/order/:orderID",
+        element: <OrderDetails />,
+        loader: authLoader,
+        hydrateFallbackElement: <HydrateFallback />,
+      },
+      {
+        path: "/checkout",
+        element: <Checkout />,
+        loader: authLoader,
+        hydrateFallbackElement: <HydrateFallback />,
+      },
+      {
         path: "/admin/dashboard",
         element: <AdminDashboard />,
         loader: adminLoader,
@@ -62,10 +85,12 @@ const router = createBrowserRouter([
       {
         path: "/restaurants",
         element: <GetAllRestaurants />,
+        hydrateFallbackElement: <HydrateFallback />,
       },
       {
         path: "/restaurant/:slugID",
         element: <RestaurantDetails />,
+        hydrateFallbackElement: <HydrateFallback />,
       },
     ],
   },
