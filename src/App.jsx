@@ -22,6 +22,7 @@ import MyOrders from "./Pages/Order";
 import Checkout from "./Pages/CheckOut";
 import OrderDetails from "./Pages/OrderDetails";
 import PaymentHistory from "./Pages/PaymentHistory";
+import MenuDetails from "./Pages/MenuDetails";
 
 const router = createBrowserRouter([
   {
@@ -97,6 +98,11 @@ const router = createBrowserRouter([
       {
         path: "/restaurant/:slugID",
         element: <RestaurantDetails />,
+        hydrateFallbackElement: <HydrateFallback />,
+      },
+      {
+        path: "/menu/:menuID",
+        element: <MenuDetails />,
         hydrateFallbackElement: <HydrateFallback />,
       },
     ],
