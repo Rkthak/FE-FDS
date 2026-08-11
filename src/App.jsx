@@ -21,6 +21,7 @@ import HydrateFallback from "./Components/HydratedFallBack";
 import MyOrders from "./Pages/Order";
 import Checkout from "./Pages/CheckOut";
 import OrderDetails from "./Pages/OrderDetails";
+import PaymentHistory from "./Pages/PaymentHistory";
 
 const router = createBrowserRouter([
   {
@@ -67,6 +68,12 @@ const router = createBrowserRouter([
       {
         path: "/checkout",
         element: <Checkout />,
+        loader: authLoader,
+        hydrateFallbackElement: <HydrateFallback />,
+      },
+      {
+        path: "/payment-history",
+        element: <PaymentHistory />,
         loader: authLoader,
         hydrateFallbackElement: <HydrateFallback />,
       },

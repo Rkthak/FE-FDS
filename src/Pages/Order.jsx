@@ -235,6 +235,30 @@ const MyOrders = () => {
           </div>
         )}
       </div>
+      <div className="mt-6 rounded-2xl border border-border bg-surface p-5 shadow-sm">
+        <div className="flex items-center justify-between">
+          <div>
+            <h2 className="font-heading text-lg font-semibold text-text-primary">
+              Payment History
+            </h2>
+
+            <p className="mt-1 text-sm text-text-secondary">
+              View your previous payments and transactions.
+            </p>
+          </div>
+
+          <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary-100 text-xl">
+            💳
+          </div>
+        </div>
+
+        <button
+          onClick={() => navigate("/payment-history")}
+          className="mt-4 rounded-xl bg-primary-500 px-5 py-2.5 text-sm font-semibold text-text-white transition hover:bg-primary-600"
+        >
+          View Payment History →
+        </button>
+      </div>
     </div>
   );
 };
