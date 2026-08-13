@@ -12,6 +12,14 @@ export const getRestaurantBySlug = async (slugID) => {
   return response;
 };
 
+export const searchRestaurants = async (filters) => {
+  const response = await publicInstance.get("/restaurant/search", {
+    params: filters,
+  });
+
+  return response.data;
+};
+
 export const getRestaurantMenus = async (restaurantID) => {
   const response = await publicInstance.get(`/menu/restaurant/${restaurantID}`);
 

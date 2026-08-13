@@ -8,6 +8,7 @@ import {
   updateFavoriteRestaurant,
 } from "../Services/favService";
 import { useSelector } from "react-redux";
+import RestaurantFilters from "../Components/RestaurantFilters";
 
 const GetAllRestaurants = () => {
   const { user } = useSelector((state) => state.auth);
@@ -161,6 +162,12 @@ const GetAllRestaurants = () => {
             food.
           </p>
         </div>
+      </section>
+      <section className="bg-primary-50 sm:px-6 lg:px-8">
+        <RestaurantFilters
+          setRestaurants={setRestaurants}
+          restaurants={restaurants}
+        />
       </section>
 
       {/* =========================================

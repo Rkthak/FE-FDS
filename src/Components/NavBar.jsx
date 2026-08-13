@@ -39,7 +39,7 @@ const Navbar = () => {
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
         {/* ================= LOGO ================= */}
         <Link to="/" className="shrink-0">
-          <h1 className="font-logo text-3xl font-black tracking-tight text-primary-500">
+          <h1 className="font-logo text-3xl font-black tracking-tight text-primary-500 mr-4">
             Food<span className="text-secondary-500">Rush</span>
           </h1>
         </Link>
@@ -93,6 +93,7 @@ const Navbar = () => {
           <button
             type="button"
             className="hidden h-10 w-10 items-center justify-center rounded-xl border border-border bg-background text-lg transition hover:border-primary-500 hover:text-primary-500 sm:flex"
+            onClick={() => navigate("/restaurants")}
           >
             🔍
           </button>
