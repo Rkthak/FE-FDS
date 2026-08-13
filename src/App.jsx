@@ -23,6 +23,8 @@ import Checkout from "./Pages/CheckOut";
 import OrderDetails from "./Pages/OrderDetails";
 import PaymentHistory from "./Pages/PaymentHistory";
 import MenuDetails from "./Pages/MenuDetails";
+import RestaurantOrders from "./Pages/RestaurantOrder";
+import RestaurantOrderDetails from "./Pages/RestuarantOrderByID";
 
 const router = createBrowserRouter([
   {
@@ -87,6 +89,18 @@ const router = createBrowserRouter([
       {
         path: "/restaurant/dashboard",
         element: <RestaurantDashboard />,
+        loader: restaurantrLoader,
+        hydrateFallbackElement: <HydrateFallback />,
+      },
+      {
+        path: "/restaurant/dashboard/orders",
+        element: <RestaurantOrders />,
+        loader: restaurantrLoader,
+        hydrateFallbackElement: <HydrateFallback />,
+      },
+      {
+        path: "/restaurant/dashboard/orders/:orderID",
+        element: <RestaurantOrderDetails />,
         loader: restaurantrLoader,
         hydrateFallbackElement: <HydrateFallback />,
       },
