@@ -3,6 +3,7 @@ import { useNavigate } from "react-router";
 import { getAllRestaurant } from "../Services/restaurant";
 import { getAllMenus } from "../Services/menuService";
 import { getImageUrl } from "../Services/helper";
+import { toast } from "react-toastify";
 
 const categoryIcons = {
   Pizza: "🍕",
@@ -35,7 +36,7 @@ const Home = () => {
 
         setRestaurants(data.restaurants || []);
       } catch (error) {
-        console.log("Restaurant error:", error);
+        toast.error(error.response?.data?.message);
       } finally {
         setRestaurantLoading(false);
       }
@@ -44,11 +45,10 @@ const Home = () => {
     const fetchMenus = async () => {
       try {
         const data = await getAllMenus();
-        console.log(data);
 
         setMenus(data || []);
       } catch (error) {
-        console.log("Menu error:", error);
+        toast.error(error.response?.data?.message);
       } finally {
         setMenuLoading(false);
       }
@@ -494,7 +494,7 @@ const Home = () => {
               </p>
 
               <button
-                onClick={() => navigate("/register-restaurant")}
+                onClick={() => navigate("/restaurant-register")}
                 className="mt-7 rounded-xl bg-surface px-6 py-3 text-sm font-bold text-primary-600 shadow transition hover:bg-primary-50"
               >
                 Register Your Restaurant →

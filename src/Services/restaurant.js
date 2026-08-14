@@ -75,3 +75,24 @@ export const uploadRestaurantBanner = async (slugID, file) => {
 
   return response.data;
 };
+
+export const applyRestaurant = async (formData) => {
+  const response = await protectedInstance.post("/restaurant/", formData);
+
+  return response.data;
+};
+
+export const getMyRestaurantApplication = async () => {
+  const response = await protectedInstance.get("/restaurant/my-application");
+
+  return response.data;
+};
+
+export const updateMyRestaurantApplication = async (formData) => {
+  const response = await protectedInstance.put(
+    "/restaurant/my-application",
+    formData,
+  );
+
+  return response.data;
+};

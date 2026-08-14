@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   deleteProfile,
@@ -9,6 +9,7 @@ import { clearUser, setUser } from "../Redux/authSlice";
 import { toast } from "react-toastify";
 import { getImageUrl } from "../Services/helper";
 import { useNavigate } from "react-router";
+import { getMyRestaurantApplication } from "../Services/restaurant";
 
 const Profile = () => {
   const { user } = useSelector((state) => state.auth);
@@ -16,6 +17,22 @@ const Profile = () => {
   const dispatch = useDispatch();
 
   const [saving, setSaving] = useState(false);
+  const [restaurantApplication, setRestaurantApplication] = useState(null);
+  useEffect(() => {
+    const fetchRestaurantApplication = async () => {
+      try {
+        const response = await getMyRestaurantApplication();
+
+        setRestaurantApplication(response.restaurant);
+      } catch (error) {
+        if (error.response?.status !== 404) {
+          console.error(error);
+        }
+      }
+    };
+
+    fetchRestaurantApplication();
+  }, []);
 
   const [formData, setFormData] = useState({
     userName: user?.userName || "",
@@ -456,6 +473,102 @@ const Profile = () => {
             View Payment History →
           </button>
         </div>
+
+        {/* MY RESTAURANT APPLICATION */}
+        {restaurantApplication && (
+          <div className="mt-8 rounded-2xl border border-border bg-surface p-5 shadow-sm">
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <h2 className="font-heading text-lg font-semibold text-text-primary">
+                  My Restaurant Application
+                </h2>
+
+                <p className="mt-1 text-sm text-text-secondary">
+                  {restaurantApplication.restaurantName}
+                </p>
+              </div>
+
+              <span
+                className={`rounded-full px-3 py-1 text-xs font-bold capitalize ${
+                  restaurantApplication.status === "approved"
+                    ? "bg-success/10 text-success"
+                    : restaurantApplication.status === "rejected"
+                      ? "bg-red-100 text-red-600"
+                      : "bg-warning/10 text-warning"
+                }`}
+              >
+                {restaurantApplication.status}
+              </span>
+            </div>
+
+            {/* Pending */}
+            {restaurantApplication.status === "pending" && (
+              <div className="mt-4 rounded-xl bg-warning/10 p-4">
+                <p className="text-sm font-semibold text-warning">
+                  Waiting for admin approval
+                </p>
+
+                <p className="mt-1 text-xs text-text-secondary">
+                  Your restaurant application has been submitted and is
+                  currently under review.
+                </p>
+              </div>
+            )}
+
+            {/* Rejected */}
+            {restaurantApplication.status === "rejected" && (
+              <div className="mt-4 rounded-xl bg-red-50 p-4">
+                <p className="text-sm font-semibold text-red-600">
+                  Application Rejected
+                </p>
+
+                {restaurantApplication.rejectionReason && (
+                  <p className="mt-1 text-sm text-red-500">
+                    Reason: {restaurantApplication.rejectionReason}
+                  </p>
+                )}
+              </div>
+            )}
+
+            {/* Approved */}
+            {restaurantApplication?.status === "approved" && (
+              <div className="mt-4">
+                <p className="text-sm text-success">
+                  🎉 Your restaurant has been approved.
+                </p>
+
+                <button
+                  type="button"
+                  onClick={() => navigate("/restaurant/dashboard")}
+                  className="mt-3 rounded-xl bg-primary-500 px-5 py-2.5 text-sm font-semibold text-text-white transition hover:bg-primary-600"
+                >
+                  Go to Restaurant Dashboard →
+                </button>
+              </div>
+            )}
+          </div>
+        )}
+        {restaurantApplication?.status === "rejected" && (
+          <div className="mt-4 rounded-xl bg-red-50 p-4">
+            <p className="text-sm font-semibold text-red-600">
+              Application Rejected
+            </p>
+
+            {restaurantApplication.rejectionReason && (
+              <p className="mt-1 text-sm text-red-500">
+                Reason: {restaurantApplication.rejectionReason}
+              </p>
+            )}
+
+            <button
+              type="button"
+              onClick={() => navigate("/restaurant-reapply")}
+              className="mt-4 rounded-xl bg-primary-500 px-5 py-2.5 text-sm font-semibold text-white hover:bg-primary-600"
+            >
+              Edit & Reapply →
+            </button>
+          </div>
+        )}
 
         {/*DELETE PROFILE  */}
         <div className="mt-10 rounded-2xl border border-red-200 bg-red-50 p-6">

@@ -31,6 +31,8 @@ import AddMenu from "./Pages/AddMenu";
 import EditMenu from "./Pages/EditMenu";
 import AdminRestaurantDetails from "./Pages/AdminRestaurantDetails";
 import AdminRestaurants from "./Pages/AdminRestaurant";
+import RestaurantRegister from "./Pages/RestaurantRegister";
+import ReApplyRestaurant from "./Pages/ReApplyRestaurant";
 
 const router = createBrowserRouter([
   {
@@ -158,6 +160,18 @@ const router = createBrowserRouter([
       {
         path: "/menu/:menuID",
         element: <MenuDetails />,
+        hydrateFallbackElement: <HydrateFallback />,
+      },
+      {
+        path: "/restaurant-register",
+        element: <RestaurantRegister />,
+        loader: authLoader,
+        hydrateFallbackElement: <HydrateFallback />,
+      },
+      {
+        path: "/restaurant-reapply",
+        element: <ReApplyRestaurant />,
+        loader: authLoader,
         hydrateFallbackElement: <HydrateFallback />,
       },
     ],
