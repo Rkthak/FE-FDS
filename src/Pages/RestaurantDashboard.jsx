@@ -254,7 +254,10 @@ const RestaurantDashboard = () => {
           </button>
 
           <button
-            onClick={() => setSidebarOpen(false)}
+            onClick={() => {
+              setSidebarOpen(false);
+              navigate("/restaurant/dashboard/menu");
+            }}
             className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-300 hover:bg-slate-800 mt-2"
           >
             <span>🍔</span>
@@ -494,7 +497,10 @@ const RestaurantDashboard = () => {
               </p>
 
               <div className="space-y-3">
-                <button className="w-full flex items-center gap-3 p-3.5 sm:p-4 rounded-xl bg-orange-50 hover:bg-orange-100 text-left">
+                <button
+                  className="w-full flex items-center gap-3 p-3.5 sm:p-4 rounded-xl bg-orange-50 hover:bg-orange-100 text-left"
+                  onClick={() => navigate("/restaurant/dashboard/menu/create")}
+                >
                   <span className="text-xl">➕</span>
 
                   <div>

@@ -64,12 +64,24 @@ const RestaurantOrders = () => {
 
       <header className="bg-white border-b border-slate-200 px-4 sm:px-6 lg:px-8 py-5">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-          <div>
-            <h1 className="text-2xl font-bold text-slate-800">Orders</h1>
+          <div className="flex items-center gap-3 min-w-0">
+            <button
+              type="button"
+              onClick={() => navigate(-1)}
+              className="w-10 h-10 rounded-xl border border-slate-200 flex items-center justify-center hover:bg-slate-50 transition shrink-0"
+            >
+              ←
+            </button>
 
-            <p className="text-sm text-slate-500 mt-1">
-              Manage your restaurant orders
-            </p>
+            <div className="min-w-0">
+              <h1 className="text-lg sm:text-xl font-bold text-slate-800">
+                Orders
+              </h1>
+
+              <p className="text-xs sm:text-sm text-slate-500 truncate">
+                Manage your restaurant orders
+              </p>
+            </div>
           </div>
 
           <div className="bg-orange-50 text-orange-600 px-4 py-2 rounded-xl text-sm font-semibold">
