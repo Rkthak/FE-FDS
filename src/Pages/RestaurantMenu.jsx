@@ -88,7 +88,7 @@ const RestaurantMenu = () => {
             <div className="flex items-center gap-3 min-w-0">
               <button
                 type="button"
-                onClick={() => navigate(-1)}
+                onClick={() => navigate("/restaurant/dashboard")}
                 className="w-10 h-10 rounded-xl border border-slate-200 flex items-center justify-center hover:bg-slate-50 transition shrink-0"
               >
                 ←
