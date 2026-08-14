@@ -50,8 +50,6 @@ const RestaurantDashboard = () => {
 
         const response = await getRestaurantOrders();
 
-        console.log("Restaurant Orders:", response);
-
         setOrders(response.orders);
       } catch (error) {
         console.error("Failed to fetch restaurant orders:", error);
@@ -218,7 +216,7 @@ const RestaurantDashboard = () => {
         </div>
 
         {/* ================= NAVIGATION ================= */}
-        <nav className="p-4 flex-1 overflow-y-auto">
+        <nav className="p-4 flex-1 overflow-y-auto scrollbar-thumb-orange-500">
           <div className="flex items-center justify-between px-3 mb-3">
             <p className="text-xs uppercase tracking-wider text-slate-500">
               Main Menu
@@ -268,7 +266,12 @@ const RestaurantDashboard = () => {
           </p>
 
           <button
-            onClick={() => setSidebarOpen(false)}
+            onClick={() => {
+              setSidebarOpen(false);
+              navigate(
+                `/restaurant/dashboard/edit/${selectedRestaurant?.slug}`,
+              );
+            }}
             className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-300 hover:bg-slate-800"
           >
             <span>🏪</span>
@@ -281,14 +284,6 @@ const RestaurantDashboard = () => {
           >
             <span>⭐</span>
             <span>Reviews</span>
-          </button>
-
-          <button
-            onClick={() => setSidebarOpen(false)}
-            className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-300 hover:bg-slate-800 mt-2"
-          >
-            <span>⚙️</span>
-            <span>Settings</span>
           </button>
         </nav>
       </aside>
@@ -348,7 +343,14 @@ const RestaurantDashboard = () => {
                 from one place.
               </p>
 
-              <button className="mt-4 sm:mt-5 bg-orange-500 hover:bg-orange-600 px-4 sm:px-5 py-2.5 rounded-xl text-sm font-semibold">
+              <button
+                className="mt-4 sm:mt-5 bg-orange-500 hover:bg-orange-600 px-4 sm:px-5 py-2.5 rounded-xl text-sm font-semibold"
+                onClick={() =>
+                  navigate(
+                    `/restaurant/dashboard/edit/${selectedRestaurant.slug}`,
+                  )
+                }
+              >
                 Manage Restaurant
               </button>
             </div>
@@ -504,7 +506,10 @@ const RestaurantDashboard = () => {
                   </div>
                 </button>
 
-                <button className="w-full flex items-center gap-3 p-3.5 sm:p-4 rounded-xl bg-slate-50 hover:bg-slate-100 text-left">
+                <button
+                  className="w-full flex items-center gap-3 p-3.5 sm:p-4 rounded-xl bg-slate-50 hover:bg-slate-100 text-left"
+                  onClick={() => navigate("/restaurant/dashboard/orders")}
+                >
                   <span className="text-xl">📋</span>
 
                   <div>
@@ -518,7 +523,14 @@ const RestaurantDashboard = () => {
                   </div>
                 </button>
 
-                <button className="w-full flex items-center gap-3 p-3.5 sm:p-4 rounded-xl bg-slate-50 hover:bg-slate-100 text-left">
+                <button
+                  className="w-full flex items-center gap-3 p-3.5 sm:p-4 rounded-xl bg-slate-50 hover:bg-slate-100 text-left"
+                  onClick={() =>
+                    navigate(
+                      `/restaurant/dashboard/edit/${selectedRestaurant.slug}`,
+                    )
+                  }
+                >
                   <span className="text-xl">🏪</span>
 
                   <div>

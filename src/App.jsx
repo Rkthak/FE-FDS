@@ -25,6 +25,7 @@ import PaymentHistory from "./Pages/PaymentHistory";
 import MenuDetails from "./Pages/MenuDetails";
 import RestaurantOrders from "./Pages/RestaurantOrder";
 import RestaurantOrderDetails from "./Pages/RestuarantOrderByID";
+import RestaurantEdit from "./Pages/RestaurantEdit";
 
 const router = createBrowserRouter([
   {
@@ -101,6 +102,12 @@ const router = createBrowserRouter([
       {
         path: "/restaurant/dashboard/orders/:orderID",
         element: <RestaurantOrderDetails />,
+        loader: restaurantrLoader,
+        hydrateFallbackElement: <HydrateFallback />,
+      },
+      {
+        path: "/restaurant/dashboard/edit/:slugID",
+        element: <RestaurantEdit />,
         loader: restaurantrLoader,
         hydrateFallbackElement: <HydrateFallback />,
       },

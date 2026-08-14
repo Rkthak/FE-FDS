@@ -50,18 +50,28 @@ export const deleteMyRestaurant = async (slugID) => {
   return response.data;
 };
 
-export const uploadRestaurantLogo = async (slugID, formData) => {
+export const uploadRestaurantLogo = async (slugID, file) => {
+  const formData = new FormData();
+
+  formData.append("restaurantLogo", file);
+
   const response = await protectedInstance.put(
     `/restaurant/my/${slugID}/upload-logo`,
     formData,
   );
+
   return response.data;
 };
 
-export const uploadRestaurantBanner = async (slugID, formData) => {
+export const uploadRestaurantBanner = async (slugID, file) => {
+  const formData = new FormData();
+
+  formData.append("restaurantBanner", file);
+
   const response = await protectedInstance.put(
     `/restaurant/my/${slugID}/upload-banner`,
     formData,
   );
+
   return response.data;
 };
