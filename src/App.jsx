@@ -29,6 +29,8 @@ import RestaurantEdit from "./Pages/RestaurantEdit";
 import RestaurantMenu from "./Pages/RestaurantMenu";
 import AddMenu from "./Pages/AddMenu";
 import EditMenu from "./Pages/EditMenu";
+import AdminRestaurantDetails from "./Pages/AdminRestaurantDetails";
+import AdminRestaurants from "./Pages/AdminRestaurant";
 
 const router = createBrowserRouter([
   {
@@ -88,6 +90,16 @@ const router = createBrowserRouter([
         path: "/admin/dashboard",
         element: <AdminDashboard />,
         loader: adminLoader,
+        hydrateFallbackElement: <HydrateFallback />,
+      },
+      {
+        path: "/admin/dashboard/restaurant",
+        element: <AdminRestaurants />,
+        hydrateFallbackElement: <HydrateFallback />,
+      },
+      {
+        path: "/admin/dashboard/restaurant/:restaurantID",
+        element: <AdminRestaurantDetails />,
         hydrateFallbackElement: <HydrateFallback />,
       },
       {
