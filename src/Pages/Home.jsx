@@ -319,6 +319,9 @@ const Home = () => {
                       src={getImageUrl(menu.image)}
                       alt={menu.itemName}
                       className="h-full w-full object-fit transition duration-500 group-hover:scale-110"
+                      onError={(e) => {
+                        e.currentTarget.style.display = "none";
+                      }}
                     />
                   ) : (
                     <div className="flex h-full items-center justify-center text-7xl">
