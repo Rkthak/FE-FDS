@@ -77,14 +77,14 @@ const AllMenus = () => {
                 >
                   {/* Image */}
                   <div className="relative h-52 overflow-hidden bg-background">
-                    {menu.menuImage ? (
+                    {menu.image ? (
                       <img
-                        src={getImageUrl(menu.menuImage)}
+                        src={getImageUrl(menu.image)}
                         alt={menu.itemName}
                         onError={(e) => {
                           e.currentTarget.style.display = "none";
                         }}
-                        className="h-full w-full object-cover transition duration-300 group-hover:scale-105"
+                        className="h-full w-full object-fit transition duration-300 group-hover:scale-105"
                       />
                     ) : (
                       <div className="flex h-full items-center justify-center text-5xl">

@@ -322,7 +322,7 @@ const RestaurantDetails = () => {
                       <img
                         src={getImageUrl(menu.image)}
                         alt={menu.itemName}
-                        className="h-full w-full object-cover"
+                        className="h-full w-full object-fit"
                         onError={(e) => {
                           e.currentTarget.style.display = "none";
 

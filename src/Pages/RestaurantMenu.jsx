@@ -158,7 +158,7 @@ const RestaurantMenu = () => {
 
             <button
               type="button"
-              onClick={() => navigate("/restaurant/menu/create")}
+              onClick={() => navigate("/restaurant/dashboard/menu/create")}
               className="mt-6 bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-xl text-sm font-semibold transition"
             >
               + Add Your First Menu

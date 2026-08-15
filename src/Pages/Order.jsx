@@ -33,8 +33,6 @@ const MyOrders = () => {
     socket.emit("join:user", user._id);
 
     const handleStatusUpdate = (data) => {
-      console.log("🔥 ORDER STATUS UPDATED:", data);
-
       setOrders((prevOrders) =>
         prevOrders.map((order) =>
           order._id === data.orderID

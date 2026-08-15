@@ -62,11 +62,12 @@ const Checkout = () => {
       return;
     }
 
+    if (placingOrder) return;
+
     try {
       setPlacingOrder(true);
       setError("");
 
-      // COD
       if (paymentMethod === "COD") {
         const data = await placeOrder();
 
@@ -74,44 +75,29 @@ const Checkout = () => {
         return;
       }
 
-      // ONLINE PAYMENT
-
-      // 1. Create Razorpay order
       const paymentData = await createPayment();
 
-      // 2. Razorpay checkout options
       const options = {
         key: import.meta.env.VITE_RAZORPAY_TEST_API_KEY,
-
         amount: paymentData.amount,
-
         currency: paymentData.currency,
-
         name: "Food Delivery",
-
         description: "Food Order Payment",
-
         order_id: paymentData.razorpayOrderId,
 
         handler: async function (response) {
           try {
-            setPlacingOrder(true);
-            setError("");
-
-            // 3. Verify payment on backend
             const verifyData = await verifyPayment({
               razorpay_order_id: response.razorpay_order_id,
               razorpay_payment_id: response.razorpay_payment_id,
               razorpay_signature: response.razorpay_signature,
             });
 
-            // 4. Backend creates order after successful verification
             navigate(`/order/${verifyData.order._id}`);
           } catch (error) {
             setError(
               error?.response?.data?.message || "Payment verification failed.",
             );
-          } finally {
             setPlacingOrder(false);
           }
         },
@@ -133,13 +119,11 @@ const Checkout = () => {
         },
       };
 
-      // 5. Open Razorpay
       const razorpay = new window.Razorpay(options);
 
       razorpay.open();
     } catch (error) {
       setError(error?.response?.data?.message || "Unable to place order.");
-    } finally {
       setPlacingOrder(false);
     }
   };

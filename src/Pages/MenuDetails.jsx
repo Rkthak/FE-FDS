@@ -5,6 +5,7 @@ import { setCart } from "../Redux/cartSlice";
 import { addToCart } from "../Services/cartService";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
+import { getImageUrl } from "../Services/helper";
 
 const MenuDetails = () => {
   const { menuID } = useParams();
@@ -89,14 +90,14 @@ const MenuDetails = () => {
         <div className="grid overflow-hidden rounded-4xl border border-border bg-surface shadow-sm lg:grid-cols-2">
           {/* IMAGE */}
           <div className="min-h-87.5 bg-secondary-100 lg:min-h-125">
-            {menu.menuImage && (
+            {menu.image && (
               <img
-                src={menu.menuImage}
+                src={getImageUrl(menu.image)}
                 alt={menu.itemName}
                 onError={(e) => {
                   e.currentTarget.hidden = true;
                 }}
-                className="h-full w-full object-cover"
+                className="h-full w-full object-fit"
               />
             )}
           </div>

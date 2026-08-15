@@ -6,15 +6,16 @@ import { getImageUrl } from "../Services/helper";
 import { toast } from "react-toastify";
 
 const categoryIcons = {
-  Pizza: "🍕",
-  Burger: "🍔",
-  Biryani: "🍛",
-  Chinese: "🥡",
-  Indian: "🍲",
-  SouthIndian: "🥘",
-  Desserts: "🍰",
-  Drinks: "🥤",
-  Snacks: "🍟",
+  pizza: "🍕",
+  burger: "🍔",
+  biryani: "🍛",
+  chinese: "🥡",
+  indian: "🍲",
+  dosa: "  ",
+  sandwich: " 🥪 ",
+  desserts: "🍰",
+  drinks: "🥤",
+  snacks: "🍟",
   default: "🍽️",
 };
 
@@ -306,18 +307,18 @@ const Home = () => {
           </div>
         ) : (
           <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-            {filteredMenus.map((menu) => (
+            {filteredMenus.slice(0, 4).map((menu) => (
               <div
                 key={menu._id}
                 className="group overflow-hidden rounded-3xl border border-border bg-surface shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl"
               >
                 {/* IMAGE */}
                 <div className="relative h-44 overflow-hidden bg-secondary-100">
-                  {menu.menuImage ? (
+                  {menu.image ? (
                     <img
-                      src={menu.menuImage}
+                      src={getImageUrl(menu.image)}
                       alt={menu.itemName}
-                      className="h-full w-full object-cover transition duration-500 group-hover:scale-110"
+                      className="h-full w-full object-fit transition duration-500 group-hover:scale-110"
                     />
                   ) : (
                     <div className="flex h-full items-center justify-center text-7xl">
