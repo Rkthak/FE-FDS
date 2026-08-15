@@ -3,7 +3,6 @@ import { Link } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 
-import { setCart, clearCartState } from "../redux/cartSlice";
 import {
   clearCart,
   getCart,
@@ -11,6 +10,7 @@ import {
   updateCartItem,
 } from "../Services/cartService";
 import { getImageUrl } from "../Services/helper";
+import { clearCartState, setCart } from "../Redux/cartSlice";
 
 const Cart = () => {
   const dispatch = useDispatch();
