@@ -344,6 +344,7 @@ const Profile = () => {
                     name="phoneNumber"
                     value={formData.phoneNumber}
                     onChange={handleChange}
+                    required
                     placeholder="Enter phone number"
                     className="w-full rounded-xl border border-border bg-background px-4 py-3 font-body text-text-primary outline-none transition placeholder:text-text-muted focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10"
                   />
@@ -387,6 +388,7 @@ const Profile = () => {
                     value={formData.fullAddress}
                     onChange={handleChange}
                     rows="3"
+                    required
                     placeholder="House no, street, area..."
                     className="w-full resize-none rounded-xl border border-border bg-background px-4 py-3 font-body text-text-primary outline-none transition placeholder:text-text-muted focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10"
                   />
@@ -404,6 +406,7 @@ const Profile = () => {
                       name="city"
                       value={formData.city}
                       onChange={handleChange}
+                      required
                       placeholder="City"
                       className="w-full rounded-xl border border-border bg-background px-4 py-3 font-body text-text-primary outline-none transition placeholder:text-text-muted focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10"
                     />
@@ -420,6 +423,7 @@ const Profile = () => {
                       value={formData.state}
                       onChange={handleChange}
                       placeholder="State"
+                      required
                       className="w-full rounded-xl border border-border bg-background px-4 py-3 font-body text-text-primary outline-none transition placeholder:text-text-muted focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10"
                     />
                   </div>
@@ -435,6 +439,7 @@ const Profile = () => {
                       value={formData.pincode}
                       onChange={handleChange}
                       placeholder="Pincode"
+                      required
                       className="w-full rounded-xl border border-border bg-background px-4 py-3 font-body text-text-primary outline-none transition placeholder:text-text-muted focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10"
                     />
                   </div>
