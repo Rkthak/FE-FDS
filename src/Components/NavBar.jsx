@@ -267,14 +267,14 @@ const Navbar = () => {
           {user ? (
             <>
               <Link
-                to="/restaurants"
+                to="/favorites"
                 className="text-xs font-semibold text-text-secondary hover:text-primary-500"
               >
                 🍽️
                 <span className="ml-1">Favorites</span>
               </Link>
               <Link
-                to="/restaurants"
+                to="/orders"
                 className="text-xs font-semibold text-text-secondary hover:text-primary-500"
               >
                 🍽️
@@ -284,7 +284,7 @@ const Navbar = () => {
           ) : (
             <>
               <Link
-                to="/restaurants"
+                to="/restaurant-register"
                 className="text-xs font-semibold text-text-secondary hover:text-primary-500"
               >
                 🏨

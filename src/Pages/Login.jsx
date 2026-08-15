@@ -99,7 +99,7 @@ const Login = () => {
         <div className="lg:w-1/2 px-6 py-10 sm:px-10 lg:px-14 lg:py-12">
           <button
             type="button"
-            onClick={() => alert("hello")}
+            onClick={() => navigate("/")}
             className="mb-3 flex items-center gap-2 text-sm font-medium text-text-secondary hover:text-primary-500 transition font-body float-right"
           >
             <span className="text-lg">←</span>
@@ -203,6 +203,7 @@ const Login = () => {
             <p className="mt-7 font-body text-center text-sm text-text-secondary">
               Don't have an account?{" "}
               <button
+                onClick={() => navigate("/register")}
                 type="button"
                 className="font-semibold text-primary-500 hover:text-primary-700 "
               >

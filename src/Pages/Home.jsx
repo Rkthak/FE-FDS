@@ -47,8 +47,8 @@ const Home = () => {
         const data = await getAllMenus();
 
         setMenus(data || []);
-      } catch (error) {
-        toast.error(error.response?.data?.message);
+      } catch {
+        setMenus([]);
       } finally {
         setMenuLoading(false);
       }

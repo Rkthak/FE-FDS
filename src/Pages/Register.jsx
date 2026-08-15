@@ -108,6 +108,7 @@ const Register = () => {
           <button
             type="button"
             className="float-right mb-3 flex items-center gap-2 font-body text-sm font-medium text-text-secondary transition hover:text-primary-500"
+            onClick={() => navigate("/")}
           >
             <span className="text-lg">←</span>
             Back to Home
@@ -236,6 +237,7 @@ const Register = () => {
             <p className="mt-7 text-center font-body text-sm text-text-secondary">
               Already have an account?{" "}
               <button
+                onClick={() => navigate("/login")}
                 type="button"
                 className="font-semibold text-primary-500 hover:text-primary-700"
               >

@@ -16,8 +16,8 @@ const MyOrders = () => {
       try {
         const data = await getMyOrders();
         setOrders(data.orders || []);
-      } catch (error) {
-        toast.error(error.message);
+      } catch {
+        setOrders([]);
       } finally {
         setLoading(false);
       }
