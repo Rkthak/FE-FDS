@@ -6,10 +6,10 @@ import {
 } from "../Services/restaurant";
 import { getImageUrl } from "../Services/helper";
 import { useDispatch, useSelector } from "react-redux";
-import { setCart } from "../redux/cartSlice";
 import { addToCart } from "../Services/cartService";
 import { toast } from "react-toastify";
 import { getFavoriteMenus, updateFavoriteMenu } from "../Services/favService";
+import { setCart } from "../Redux/cartSlice";
 
 const RestaurantDetails = () => {
   const { user } = useSelector((state) => state.auth);
