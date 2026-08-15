@@ -2,11 +2,8 @@ import { useEffect, useState } from "react";
 import { cancelOrder, getMyOrders } from "../Services/order";
 import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
-import { useSelector } from "react-redux";
-import socket from "../socket";
 
 const MyOrders = () => {
-  const { user } = useSelector((state) => state.auth);
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
@@ -24,36 +21,6 @@ const MyOrders = () => {
     };
     fetchOrders();
   }, []);
-
-  useEffect(() => {
-    if (!user?._id) return;
-
-    socket.connect();
-
-    socket.emit("join:user", user._id);
-
-    const handleStatusUpdate = (data) => {
-      setOrders((prevOrders) =>
-        prevOrders.map((order) =>
-          order._id === data.orderID
-            ? {
-                ...order,
-                orderStatus: data.status,
-              }
-            : order,
-        ),
-      );
-
-      toast.info(`Order status: ${data.status.replaceAll("_", " ")}`);
-    };
-
-    socket.on("order:status:update", handleStatusUpdate);
-
-    return () => {
-      socket.off("order:status:update", handleStatusUpdate);
-      socket.disconnect();
-    };
-  }, [user?._id]);
 
   const getStatusStyle = (status) => {
     switch (status) {

@@ -34,6 +34,7 @@ import AdminRestaurants from "./Pages/AdminRestaurant";
 import RestaurantRegister from "./Pages/RestaurantRegister";
 import ReApplyRestaurant from "./Pages/ReApplyRestaurant";
 import AllMenus from "./Pages/AllMenu";
+import OrderSocket from "./Components/OrderSocket";
 
 const router = createBrowserRouter([
   {
@@ -204,6 +205,7 @@ const App = () => {
   return (
     <div>
       <Provider store={store}>
+        <OrderSocket />
         <RouterProvider router={router} />{" "}
         <ToastContainer
           position="top-right"
