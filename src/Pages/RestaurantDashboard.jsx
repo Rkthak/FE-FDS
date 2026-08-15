@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { getMyRestaurant } from "../Services/restaurant";
 import { getRestaurantOrders } from "../Services/order";
 import { useNavigate } from "react-router";
+import socket from "../socket";
 
 const RestaurantDashboard = () => {
   const [restaurants, setRestaurants] = useState([]);
@@ -16,6 +17,28 @@ const RestaurantDashboard = () => {
   const [orders, setOrders] = useState([]);
   const [ordersLoading, setOrdersLoading] = useState(true);
   const [ordersError, setOrdersError] = useState("");
+
+  const [newOrderNotification, setNewOrderNotification] = useState(null);
+  const restaurantID = selectedRestaurant?._id;
+  useEffect(() => {
+    if (!restaurantID) return;
+
+    socket.connect();
+
+    socket.emit("join:restaurant", restaurantID);
+
+    const handleNewOrder = (data) => {
+      setOrders((prev) => [data.order, ...prev]);
+      setNewOrderNotification(data.order);
+    };
+
+    socket.on("order:new", handleNewOrder);
+
+    return () => {
+      socket.off("order:new", handleNewOrder);
+      socket.disconnect();
+    };
+  }, [restaurantID]);
 
   useEffect(() => {
     const fetchRestaurant = async () => {
@@ -315,9 +338,23 @@ const RestaurantDashboard = () => {
           </div>
 
           <div className="flex items-center gap-2 sm:gap-4 shrink-0">
-            <button className="relative w-9 h-9 sm:w-10 sm:h-10 rounded-xl border border-slate-200 flex items-center justify-center hover:bg-slate-50">
+            <button
+              onClick={() => {
+                if (newOrderNotification) {
+                  navigate(
+                    `/restaurant/dashboard/orders/${newOrderNotification._id}`,
+                  );
+                  setNewOrderNotification(null);
+                }
+              }}
+              className="relative w-9 h-9 sm:w-10 sm:h-10 rounded-xl border border-slate-200 flex items-center justify-center hover:bg-slate-50"
+            >
               🔔
-              <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full" />
+              {newOrderNotification && (
+                <span className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center">
+                  1
+                </span>
+              )}
             </button>
 
             <div className="hidden sm:flex items-center gap-2 px-3 sm:px-4 py-2 rounded-xl bg-green-50 border border-green-100">

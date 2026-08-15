@@ -10,6 +10,7 @@ import { toast } from "react-toastify";
 import { getImageUrl } from "../Services/helper";
 import { useNavigate } from "react-router";
 import { getMyRestaurantApplication } from "../Services/restaurant";
+import socket from "../socket";
 
 const Profile = () => {
   const { user } = useSelector((state) => state.auth);
@@ -18,6 +19,31 @@ const Profile = () => {
 
   const [saving, setSaving] = useState(false);
   const [restaurantApplication, setRestaurantApplication] = useState(null);
+  const [restaurant, setRestaurant] = useState(null);
+
+  useEffect(() => {
+    if (!restaurant?._id) return;
+
+    socket.connect();
+
+    socket.emit("join:restaurant", restaurant._id);
+
+    const handleStatusUpdate = (data) => {
+      setRestaurant((prev) => ({
+        ...prev,
+        status: data.status,
+        rejectionReason: data.rejectionReason,
+      }));
+    };
+
+    socket.on("restaurant:status:update", handleStatusUpdate);
+
+    return () => {
+      socket.off("restaurant:status:update", handleStatusUpdate);
+      socket.disconnect();
+    };
+  }, [restaurant?._id]);
+
   useEffect(() => {
     const fetchRestaurantApplication = async () => {
       try {
@@ -26,7 +52,7 @@ const Profile = () => {
         setRestaurantApplication(response.restaurant);
       } catch (error) {
         if (error.response?.status !== 404) {
-          console.error(error);
+          toast.error(error);
         }
       }
     };

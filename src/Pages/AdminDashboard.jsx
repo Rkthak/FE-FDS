@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { getRestaurants } from "../Services/adminService";
 import { getImageUrl } from "../Services/helper";
+import socket from "../socket";
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
@@ -9,6 +10,24 @@ const AdminDashboard = () => {
   const [restaurants, setRestaurants] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [newRestaurantNotification, setNewRestaurantNotification] =
+    useState(null);
+
+  useEffect(() => {
+    socket.connect();
+
+    socket.emit("join:admin");
+
+    socket.on("restaurant:application:new", (data) => {
+      setRestaurants((prev) => [data.restaurant, ...prev]);
+
+      setNewRestaurantNotification(data.restaurant);
+    });
+    return () => {
+      socket.off("restaurant:application:new");
+      socket.disconnect();
+    };
+  }, []);
 
   // ================= FETCH RESTAURANTS =================
 
@@ -22,8 +41,6 @@ const AdminDashboard = () => {
 
         setRestaurants(response.restaurants || response || []);
       } catch (error) {
-        console.error(error);
-
         setError(
           error.response?.data?.message || "Unable to load restaurants.",
         );
@@ -130,15 +147,19 @@ const AdminDashboard = () => {
             </div>
 
             <div className="flex items-center gap-3">
-              <div className="hidden sm:block text-right">
-                <p className="text-sm font-semibold text-slate-700">Admin</p>
-
-                <p className="text-xs text-slate-400">Administrator</p>
-              </div>
-
-              <div className="w-10 h-10 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center font-bold">
-                A
-              </div>
+              {newRestaurantNotification && (
+                <div className="relative">
+                  <button
+                    onClick={() => setNewRestaurantNotification(null)}
+                    className="relative w-10 h-10 rounded-full bg-orange-50 flex items-center justify-center text-xl hover:bg-orange-100"
+                  >
+                    🔔
+                    <span className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
+                      1
+                    </span>
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </header>
