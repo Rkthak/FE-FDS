@@ -1,4 +1,4 @@
-const BASE_URL = "http://localhost:5000";
+const BASE_URL = "https://be-fds.onrender.com";
 
 export const getImageUrl = (image) => {
   if (!image) return "";
