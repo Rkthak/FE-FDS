@@ -4,10 +4,11 @@ import { getMenuByID } from "../Services/menuService";
 import { setCart } from "../Redux/cartSlice";
 import { addToCart } from "../Services/cartService";
 import { toast } from "react-toastify";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getImageUrl } from "../Services/helper";
 
 const MenuDetails = () => {
+  const { user } = useSelector((state) => state.auth);
   const { menuID } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -22,7 +23,7 @@ const MenuDetails = () => {
 
         setMenu(data);
       } catch (error) {
-        toast.error(error.message);
+        toast.error(error.response?.data?.message || "falied to load menu");
       } finally {
         setLoading(false);
       }
@@ -59,14 +60,16 @@ const MenuDetails = () => {
   // ADD TO CART
   const handleAddToCart = async (menuID) => {
     try {
+      if (!user) {
+        toast.info("Please log in to add items to your cart.");
+        return;
+      }
       const response = await addToCart(menuID, 1);
 
       dispatch(setCart(response.cart));
 
       toast.success("Item added to cart");
     } catch (error) {
-      console.error("Add to cart error:", error);
-
       toast.error(
         error.response?.data?.message || "Failed to add item to cart",
       );

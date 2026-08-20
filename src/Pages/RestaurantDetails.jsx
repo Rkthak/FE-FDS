@@ -79,7 +79,9 @@ const RestaurantDetails = () => {
 
         setFavoriteMenus(response.favoriteFoods || []);
       } catch (error) {
-        toast.error(error.response?.data?.message);
+        toast.error(
+          error.response?.data?.message || "Failed to load favorite menus",
+        );
       }
     };
 
@@ -153,14 +155,16 @@ const RestaurantDetails = () => {
 
   const handleAddToCart = async (menuID) => {
     try {
+      if (!user) {
+        toast.info("Please log in to add items to your cart.");
+        return;
+      }
       const response = await addToCart(menuID, 1);
 
       dispatch(setCart(response.cart));
 
       toast.success("Item added to cart");
     } catch (error) {
-      console.error("Add to cart error:", error);
-
       toast.error(
         error.response?.data?.message || "Failed to add item to cart",
       );

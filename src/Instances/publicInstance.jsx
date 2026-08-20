@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const baseURL = "https://be-fds.onrender.com/api/v1";
+const baseURL = "http://localhost:5000/api/v1";
 
 const publicInstance = axios.create({
   baseURL,
