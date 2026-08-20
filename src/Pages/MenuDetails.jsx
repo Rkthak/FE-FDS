@@ -2,13 +2,14 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router";
 import { getMenuByID } from "../Services/menuService";
 import { setCart } from "../Redux/cartSlice";
-import { addToCart } from "../Services/cartService";
+import { addToCart, getCart } from "../Services/cartService";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import { getImageUrl } from "../Services/helper";
 
 const MenuDetails = () => {
   const { user } = useSelector((state) => state.auth);
+  const { cart } = useSelector((state) => state.cart);
   const { menuID } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -31,6 +32,21 @@ const MenuDetails = () => {
 
     fetchMenu();
   }, [menuID]);
+
+  useEffect(() => {
+    const fetchCart = async () => {
+      if (!user) return;
+
+      try {
+        const response = await getCart();
+        dispatch(setCart(response));
+      } catch (error) {
+        toast.error("Failed to load cart:", error);
+      }
+    };
+
+    fetchCart();
+  }, [user, dispatch]);
 
   if (loading) {
     return (
@@ -57,21 +73,32 @@ const MenuDetails = () => {
     );
   }
 
+  const isAdded = cart?.items?.some(
+    (item) => item.menuId?._id === menu?._id || item.menuId === menu?._id,
+  );
+
   // ADD TO CART
   const handleAddToCart = async (menuID) => {
     try {
       if (!user) {
         toast.info("Please log in to add items to your cart.");
+        navigate("/login");
         return;
       }
+
+      if (!menu.isAvailable) {
+        toast.error("This dish is currently unavailable.");
+        return;
+      }
+
       const response = await addToCart(menuID, 1);
 
-      dispatch(setCart(response.cart));
+      dispatch(setCart(response));
 
-      toast.success("Item added to cart");
+      toast.success("Item added to cart.");
     } catch (error) {
       toast.error(
-        error.response?.data?.message || "Failed to add item to cart",
+        error.response?.data?.message || "Failed to add item to cart.",
       );
     }
   };
@@ -153,10 +180,21 @@ const MenuDetails = () => {
 
             {/* Add to cart */}
             <button
-              className="mt-8 w-full rounded-xl bg-primary-500 py-3.5 text-sm font-bold text-text-white transition hover:bg-primary-600 sm:w-64"
+              disabled={menu.isAvailable === false || isAdded}
               onClick={() => handleAddToCart(menu._id)}
+              className={`mt-8 w-full rounded-xl py-3.5 text-sm font-bold text-text-white transition sm:w-64 ${
+                menu.isAvailable === false
+                  ? "cursor-not-allowed bg-gray-400"
+                  : isAdded
+                    ? "cursor-not-allowed bg-success"
+                    : "bg-primary-500 hover:bg-primary-600"
+              }`}
             >
-              Add to Cart
+              {menu.isAvailable === false
+                ? "Currently Unavailable"
+                : isAdded
+                  ? "Added to Cart ✓"
+                  : "Add to Cart"}
             </button>
           </div>
         </div>
