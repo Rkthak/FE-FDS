@@ -3,10 +3,12 @@ import { Link, useNavigate } from "react-router";
 import { clearUser } from "../Redux/authSlice";
 import { logoutUser } from "../Services/authService";
 import { toast } from "react-toastify";
+import { useState } from "react";
 
 const Navbar = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [userDropdownOpen, setUserDropdownOpen] = useState(false);
 
   const { user, isAuthenticated } = useSelector((state) => state.auth);
   const { cart } = useSelector((state) => state.cart);
@@ -119,6 +121,7 @@ const Navbar = () => {
               {/* User Button */}
               <button
                 type="button"
+                onClick={() => setUserDropdownOpen((prev) => !prev)}
                 className="flex items-center gap-2 rounded-xl border border-border bg-background px-3 py-2 transition hover:border-primary-500 hover:bg-primary-50"
               >
                 {/* Avatar */}
@@ -143,16 +146,7 @@ const Navbar = () => {
 
               {/* ================= DROPDOWN ================= */}
               <div
-                className="
-                  invisible absolute right-0 top-full z-50 mt-2
-                  w-56 translate-y-2 rounded-2xl
-                  border border-border bg-surface p-2
-                  opacity-0 shadow-xl
-                  transition-all duration-200
-                  group-hover:visible
-                  group-hover:translate-y-0
-                  group-hover:opacity-100
-                "
+                className={`absolute right-0 top-full z-50 mt-2 w-56 translate-y-2 rounded-2xl border border-border bg-surface p-2    opacity-0 shadow-xl transition-all duration-200 md:group-hover:visible md:group-hover:translate-y-0 md:group-hover:opacity-100 ${userDropdownOpen ? "visible translate-y-0 opacity-100" : "invisible"}`}
               >
                 {/* User Info */}
                 <div className="border-b border-border px-3 py-3">
