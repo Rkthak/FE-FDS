@@ -100,6 +100,46 @@ const Profile = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // Username validation
+    if (formData.userName.trim().length < 3) {
+      toast.error("Username must be at least 3 characters long.");
+      return;
+    }
+
+    // Phone validation
+    const phoneRegex = /^[0-9]{10}$/;
+
+    if (!phoneRegex.test(formData.phoneNumber.trim())) {
+      toast.error("Please enter a valid 10-digit phone number.");
+      return;
+    }
+
+    // Address validation
+    if (formData.fullAddress.trim().length < 5) {
+      toast.error("Please enter a valid address.");
+      return;
+    }
+
+    // City validation
+    if (formData.city.trim().length < 2) {
+      toast.error("Please enter a valid city.");
+      return;
+    }
+
+    // State validation
+    if (formData.state.trim().length < 2) {
+      toast.error("Please enter a valid state.");
+      return;
+    }
+
+    // Pincode validation
+    const pincodeRegex = /^[0-9]{6}$/;
+
+    if (!pincodeRegex.test(formData.pincode.trim())) {
+      toast.error("Please enter a valid 6-digit pincode.");
+      return;
+    }
+
     try {
       setSaving(true);
 
@@ -288,7 +328,7 @@ const Profile = () => {
             </div>
 
             {/* ================= FORM ================= */}
-            <form onSubmit={handleSubmit} className="mt-8">
+            <form onSubmit={handleSubmit} className="mt-8" noValidate>
               {/* Personal Information */}
               <div>
                 <h3 className="font-logo text-xl font-black text-text-primary">
@@ -344,7 +384,11 @@ const Profile = () => {
                     name="phoneNumber"
                     value={formData.phoneNumber}
                     onChange={handleChange}
+                    onInput={(e) => {
+                      e.target.value = e.target.value.replace(/\D/g, "");
+                    }}
                     required
+                    maxLength={10}
                     placeholder="Enter phone number"
                     className="w-full rounded-xl border border-border bg-background px-4 py-3 font-body text-text-primary outline-none transition placeholder:text-text-muted focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10"
                   />
@@ -438,8 +482,13 @@ const Profile = () => {
                       name="pincode"
                       value={formData.pincode}
                       onChange={handleChange}
+                      onInput={(e) => {
+                        e.target.value = e.target.value.replace(/\D/g, "");
+                      }}
                       placeholder="Pincode"
                       required
+                      maxLength={6}
+                      pattern="[0-9]+"
                       className="w-full rounded-xl border border-border bg-background px-4 py-3 font-body text-text-primary outline-none transition placeholder:text-text-muted focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10"
                     />
                   </div>

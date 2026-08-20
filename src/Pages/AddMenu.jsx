@@ -142,6 +142,7 @@ const AddMenu = () => {
       // Image required
       if (!imageFile) {
         setError("Dish image is required.");
+        toast.error("Dish image is required.");
         setSaving(false);
         return;
       }
@@ -149,18 +150,21 @@ const AddMenu = () => {
       // Basic validation
       if (!formData.itemName.trim()) {
         setError("Item name is required.");
+        toast.error("Item name is required.");
         setSaving(false);
         return;
       }
 
       if (!formData.category.trim()) {
         setError("Category is required.");
+        toast.error("Category is required.");
         setSaving(false);
         return;
       }
 
       if (!formData.price || Number(formData.price) <= 0) {
         setError("Price must be greater than 0.");
+        toast.error("Price must be greater than 0.");
         setSaving(false);
         return;
       }
@@ -212,8 +216,8 @@ const AddMenu = () => {
 
       navigate("/restaurant/dashboard/menu");
     } catch (error) {
+      toast.error(error.response?.data?.message || "unable to create menu");
       setError(error.response?.data?.message || "Unable to create menu.");
-      toast.error(error.response?.data?.message || "unable");
     } finally {
       setSaving(false);
     }
