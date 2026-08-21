@@ -39,9 +39,12 @@ const MenuDetails = () => {
 
       try {
         const response = await getCart();
-        dispatch(setCart(response));
-      } catch (error) {
-        toast.error("Failed to load cart:", error);
+
+        const updatedCart = response?.cart ?? response;
+
+        dispatch(setCart(updatedCart));
+      } catch {
+        dispatch(setCart([]));
       }
     };
 
@@ -73,10 +76,12 @@ const MenuDetails = () => {
     );
   }
 
-  const isAdded = cart?.items?.some(
-    (item) => item.menuId?._id === menu?._id || item.menuId === menu?._id,
-  );
+  const isAdded = (cart?.items || []).some((item) => {
+    const cartMenuId =
+      typeof item.menuId === "object" ? item.menuId?._id : item.menuId;
 
+    return String(cartMenuId) === String(menu?._id);
+  });
   // ADD TO CART
   const handleAddToCart = async (menuID) => {
     try {
@@ -86,19 +91,22 @@ const MenuDetails = () => {
         return;
       }
 
-      if (!menu.isAvailable) {
+      if (menu.isAvailable === false) {
         toast.error("This dish is currently unavailable.");
         return;
       }
 
       const response = await addToCart(menuID, 1);
 
-      dispatch(setCart(response));
+      const updatedCart = response?.cart ?? response;
+
+      dispatch(setCart(updatedCart));
 
       toast.success("Item added to cart.");
     } catch (error) {
       toast.error(
-        error.response?.data?.message || "Failed to add item to cart.",
+        error?.response?.data?.message ||
+          "Unable to add item to cart. Please try again.",
       );
     }
   };

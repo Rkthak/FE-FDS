@@ -131,8 +131,8 @@ const RestaurantDetails = () => {
       try {
         const response = await getCart();
         dispatch(setCart(response));
-      } catch (error) {
-        toast.error("Failed to load cart:", error);
+      } catch {
+        dispatch(setCart([]));
       }
     };
 
