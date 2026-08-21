@@ -321,6 +321,14 @@ const Profile = () => {
                       <p className="font-heading text-sm font-bold text-warning">
                         Not Verified
                       </p>
+
+                      <button
+                        type="button"
+                        onClick={() => navigate("/verify-email")}
+                        className="ml-auto rounded-lg bg-warning px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-primary-600"
+                      >
+                        Verify Email
+                      </button>
                     </>
                   )}
                 </div>

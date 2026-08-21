@@ -35,6 +35,7 @@ import RestaurantRegister from "./Pages/RestaurantRegister";
 import ReApplyRestaurant from "./Pages/ReApplyRestaurant";
 import AllMenus from "./Pages/AllMenu";
 import OrderSocket from "./Components/OrderSocket";
+import VerifyEmail from "./Pages/VerifyEmail";
 
 const router = createBrowserRouter([
   {
@@ -87,6 +88,12 @@ const router = createBrowserRouter([
       {
         path: "/payment-history",
         element: <PaymentHistory />,
+        loader: authLoader,
+        hydrateFallbackElement: <HydrateFallback />,
+      },
+      {
+        path: "/verify-email",
+        element: <VerifyEmail />,
         loader: authLoader,
         hydrateFallbackElement: <HydrateFallback />,
       },
