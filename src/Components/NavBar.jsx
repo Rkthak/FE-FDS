@@ -146,7 +146,7 @@ const Navbar = () => {
 
               {/* ================= DROPDOWN ================= */}
               <div
-                className={`absolute right-0 top-full z-50 mt-2 w-56 translate-y-2 rounded-2xl border border-border bg-surface p-2    opacity-0 shadow-xl transition-all duration-200 md:group-hover:visible md:group-hover:translate-y-0 md:group-hover:opacity-100 ${userDropdownOpen ? "visible translate-y-0 opacity-100" : "invisible"}`}
+                className={`absolute right-0 top-full z-50 mt-2 w-56 translate-y-2 rounded-2xl border border-border bg-surface p-2    opacity-0 shadow-xl transition-all duration-200 lg:group-hover:visible lg:group-hover:translate-y-0 lg:group-hover:opacity-100 ${userDropdownOpen ? "visible translate-y-0 opacity-100" : "invisible"}`}
               >
                 {/* User Info */}
                 <div className="border-b border-border px-3 py-3">
