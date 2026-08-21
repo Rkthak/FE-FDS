@@ -67,3 +67,33 @@ export const verifyVerificationOTP = async (otp) => {
 
   return response.data;
 };
+
+export const sendResetPasswordOTP = async (email) => {
+  const response = await publicInstance.post(
+    `/auth/send-reset-password-otp`,
+    { email },
+    { withCredentials: true },
+  );
+
+  return response.data;
+};
+
+export const resetPassword = async (
+  email,
+  otp,
+  newPassword,
+  confirmPassword,
+) => {
+  const response = await publicInstance.post(
+    `/auth/reset-password`,
+    {
+      email,
+      otp,
+      newPassword,
+      confirmPassword,
+    },
+    { withCredentials: true },
+  );
+
+  return response.data;
+};
