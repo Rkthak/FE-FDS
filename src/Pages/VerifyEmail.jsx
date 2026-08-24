@@ -29,7 +29,7 @@ const VerifyEmail = () => {
   }
 
   if (user.isVerified) {
-    return <Navigate to="/" replace />;
+    return <Navigate to="/profile" replace />;
   }
 
   // ================= SEND OTP =================
@@ -51,7 +51,9 @@ const VerifyEmail = () => {
         return;
       }
 
-      setError(error.response?.data?.message || "Failed to send OTP");
+      setError(
+        error.response?.data?.message || "Failed to send OTP. Try again later",
+      );
     } finally {
       setSendingOTP(false);
     }
