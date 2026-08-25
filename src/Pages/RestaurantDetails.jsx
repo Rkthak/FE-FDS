@@ -10,6 +10,7 @@ import { addToCart, getCart } from "../Services/cartService";
 import { toast } from "react-toastify";
 import { getFavoriteMenus, updateFavoriteMenu } from "../Services/favService";
 import { setCart } from "../Redux/cartSlice";
+import RestaurantReviews from "../Components/Review";
 
 const RestaurantDetails = () => {
   const { user } = useSelector((state) => state.auth);
@@ -250,7 +251,6 @@ const RestaurantDetails = () => {
                   className="h-full w-full object-cover"
                   onError={(e) => {
                     e.currentTarget.style.display = "none";
-
                     e.currentTarget.nextElementSibling.style.display = "flex";
                   }}
                 />
@@ -459,6 +459,7 @@ const RestaurantDetails = () => {
             })}
           </div>
         )}
+        <RestaurantReviews slug={slugID} />
       </div>
     </div>
   );

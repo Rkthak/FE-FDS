@@ -9,9 +9,7 @@ const authInitLoader = async () => {
     store.dispatch(setUser(response.user));
 
     return null;
-  } catch (error) {
-    console.log("Auth init:", error.message);
-
+  } catch {
     store.dispatch(clearUser());
 
     // ❗ Login par redirect nahi karna
