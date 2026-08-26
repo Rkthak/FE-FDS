@@ -45,9 +45,7 @@ const VerifyEmail = () => {
       setMessage(data.message);
     } catch (error) {
       if (error.code === "ECONNABORTED") {
-        setError(
-          "OTP may have been sent. Please check your email before requesting a new OTP.",
-        );
+        setError("OTP request timeout. Please Try later.");
         return;
       }
 

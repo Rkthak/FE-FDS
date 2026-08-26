@@ -32,6 +32,10 @@ const ForgotPassword = () => {
       toast.success(response.message);
       setOtpSent(true);
     } catch (error) {
+      if (error.code === "ECONNABORTED") {
+        setError("OTP request timeout. Please Try later.");
+        return;
+      }
       toast.error(
         error.response?.data?.message ||
           "Failed to send reset OTP. Please try again later.",
