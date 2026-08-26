@@ -62,7 +62,7 @@ export const restaurantrLoader = async () => {
 
     if (user.role !== "restaurant") {
       if (user.role === "user") {
-        return redirect("/dashboard");
+        return redirect("/profile");
       } else if (user.role === "admin") {
         return redirect("/admin/dashboard");
       }
