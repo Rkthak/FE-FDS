@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const baseURL = "http://localhost:5000/api/v1";
+export const baseURL = "https://be-fds.onrender.com/api/v1";
 
 const protectedInstance = axios.create({
   baseURL: baseURL,
