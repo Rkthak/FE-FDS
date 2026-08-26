@@ -305,7 +305,12 @@ const RestaurantDashboard = () => {
           </button>
 
           <button
-            onClick={() => setSidebarOpen(false)}
+            onClick={() => {
+              setSidebarOpen(false);
+              navigate(
+                `/restaurant/dashboard/${selectedRestaurant?.slug}/review`,
+              );
+            }}
             className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-300 hover:bg-slate-800 mt-2"
           >
             <span>⭐</span>
@@ -587,7 +592,14 @@ const RestaurantDashboard = () => {
                   </div>
                 </button>
 
-                <button className="w-full flex items-center gap-3 p-3.5 sm:p-4 rounded-xl bg-slate-50 hover:bg-slate-100 text-left">
+                <button
+                  className="w-full flex items-center gap-3 p-3.5 sm:p-4 rounded-xl bg-slate-50 hover:bg-slate-100 text-left"
+                  onClick={() =>
+                    navigate(
+                      `/restaurant/dashboard/${selectedRestaurant.slug}/review`,
+                    )
+                  }
+                >
                   <span className="text-xl">⭐</span>
 
                   <div>

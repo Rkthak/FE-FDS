@@ -32,9 +32,6 @@ export const updateProfilePicture = async (imageFile) => {
 
   formData.append("profileImage", imageFile);
 
-  console.log("FILE BEING SENT:", imageFile);
-  console.log("FORM DATA:", formData.get("profileImage"));
-
   const response = await protectedInstance.put(
     "/auth/upload-profileImage",
     formData,
@@ -44,5 +41,59 @@ export const updateProfilePicture = async (imageFile) => {
 
 export const deleteProfile = async () => {
   const response = await protectedInstance.delete("/auth/me");
+  return response.data;
+};
+
+export const sendVerificationOTP = async () => {
+  const response = await protectedInstance.post(
+    `/auth/send-verification-otp`,
+    {},
+    {
+      withCredentials: true,
+    },
+  );
+
+  return response.data;
+};
+
+export const verifyVerificationOTP = async (otp) => {
+  const response = await protectedInstance.post(
+    `/auth/verify-verification-otp`,
+    { otp: String(otp) },
+    {
+      withCredentials: true,
+    },
+  );
+
+  return response.data;
+};
+
+export const sendResetPasswordOTP = async (email) => {
+  const response = await publicInstance.post(
+    `/auth/send-reset-password-otp`,
+    { email },
+    { withCredentials: true },
+  );
+
+  return response.data;
+};
+
+export const resetPassword = async (
+  email,
+  otp,
+  newPassword,
+  confirmPassword,
+) => {
+  const response = await publicInstance.post(
+    `/auth/reset-password`,
+    {
+      email,
+      otp,
+      newPassword,
+      confirmPassword,
+    },
+    { withCredentials: true },
+  );
+
   return response.data;
 };

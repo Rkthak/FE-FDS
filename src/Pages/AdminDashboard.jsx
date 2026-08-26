@@ -126,6 +126,14 @@ const AdminDashboard = () => {
             <span>🍽️</span>
             Restaurants
           </button>
+
+          <button
+            onClick={() => navigate("/admin/dashboard/reviews")}
+            className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 hover:bg-slate-50 transition font-medium text-sm"
+          >
+            <span>⭐</span>
+            Reviews
+          </button>
         </nav>
       </aside>
 

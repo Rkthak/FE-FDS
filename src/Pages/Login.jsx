@@ -147,7 +147,8 @@ const Login = () => {
 
                   <button
                     type="button"
-                    className="text-sm font-medium font-body text-primary-500 hover:text-primary-700"
+                    onClick={() => navigate("/reset-password")}
+                    className="cursor-pointer text-sm font-medium font-body text-primary-500 hover:text-primary-700"
                   >
                     Forgot password?
                   </button>

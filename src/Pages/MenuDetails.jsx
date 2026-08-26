@@ -2,12 +2,14 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router";
 import { getMenuByID } from "../Services/menuService";
 import { setCart } from "../Redux/cartSlice";
-import { addToCart } from "../Services/cartService";
+import { addToCart, getCart } from "../Services/cartService";
 import { toast } from "react-toastify";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getImageUrl } from "../Services/helper";
 
 const MenuDetails = () => {
+  const { user } = useSelector((state) => state.auth);
+  const { cart } = useSelector((state) => state.cart);
   const { menuID } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -22,7 +24,7 @@ const MenuDetails = () => {
 
         setMenu(data);
       } catch (error) {
-        toast.error(error.message);
+        toast.error(error.response?.data?.message || "falied to load menu");
       } finally {
         setLoading(false);
       }
@@ -30,6 +32,24 @@ const MenuDetails = () => {
 
     fetchMenu();
   }, [menuID]);
+
+  useEffect(() => {
+    const fetchCart = async () => {
+      if (!user) return;
+
+      try {
+        const response = await getCart();
+
+        const updatedCart = response?.cart ?? response;
+
+        dispatch(setCart(updatedCart));
+      } catch {
+        dispatch(setCart([]));
+      }
+    };
+
+    fetchCart();
+  }, [user, dispatch]);
 
   if (loading) {
     return (
@@ -56,19 +76,37 @@ const MenuDetails = () => {
     );
   }
 
+  const isAdded = (cart?.items || []).some((item) => {
+    const cartMenuId =
+      typeof item.menuId === "object" ? item.menuId?._id : item.menuId;
+
+    return String(cartMenuId) === String(menu?._id);
+  });
   // ADD TO CART
   const handleAddToCart = async (menuID) => {
     try {
+      if (!user) {
+        toast.info("Please log in to add items to your cart.");
+        navigate("/login");
+        return;
+      }
+
+      if (menu.isAvailable === false) {
+        toast.error("This dish is currently unavailable.");
+        return;
+      }
+
       const response = await addToCart(menuID, 1);
 
-      dispatch(setCart(response.cart));
+      const updatedCart = response?.cart ?? response;
 
-      toast.success("Item added to cart");
+      dispatch(setCart(updatedCart));
+
+      toast.success("Item added to cart.");
     } catch (error) {
-      console.error("Add to cart error:", error);
-
       toast.error(
-        error.response?.data?.message || "Failed to add item to cart",
+        error?.response?.data?.message ||
+          "Unable to add item to cart. Please try again.",
       );
     }
   };
@@ -150,10 +188,21 @@ const MenuDetails = () => {
 
             {/* Add to cart */}
             <button
-              className="mt-8 w-full rounded-xl bg-primary-500 py-3.5 text-sm font-bold text-text-white transition hover:bg-primary-600 sm:w-64"
+              disabled={menu.isAvailable === false || isAdded}
               onClick={() => handleAddToCart(menu._id)}
+              className={`mt-8 w-full rounded-xl py-3.5 text-sm font-bold text-text-white transition sm:w-64 ${
+                menu.isAvailable === false
+                  ? "cursor-not-allowed bg-gray-400"
+                  : isAdded
+                    ? "cursor-not-allowed bg-success"
+                    : "bg-primary-500 hover:bg-primary-600"
+              }`}
             >
-              Add to Cart
+              {menu.isAvailable === false
+                ? "Currently Unavailable"
+                : isAdded
+                  ? "Added to Cart ✓"
+                  : "Add to Cart"}
             </button>
           </div>
         </div>

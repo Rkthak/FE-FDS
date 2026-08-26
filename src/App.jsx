@@ -35,6 +35,10 @@ import RestaurantRegister from "./Pages/RestaurantRegister";
 import ReApplyRestaurant from "./Pages/ReApplyRestaurant";
 import AllMenus from "./Pages/AllMenu";
 import OrderSocket from "./Components/OrderSocket";
+import VerifyEmail from "./Pages/VerifyEmail";
+import ForgotPassword from "./Pages/ForgotPassword";
+import RestaurantReview from "./Pages/RestaurantReview";
+import AdminReviews from "./Pages/AdminReview";
 
 const router = createBrowserRouter([
   {
@@ -91,6 +95,12 @@ const router = createBrowserRouter([
         hydrateFallbackElement: <HydrateFallback />,
       },
       {
+        path: "/verify-email",
+        element: <VerifyEmail />,
+        loader: authLoader,
+        hydrateFallbackElement: <HydrateFallback />,
+      },
+      {
         path: "/admin/dashboard",
         element: <AdminDashboard />,
         loader: adminLoader,
@@ -99,11 +109,25 @@ const router = createBrowserRouter([
       {
         path: "/admin/dashboard/restaurant",
         element: <AdminRestaurants />,
+        loader: adminLoader,
         hydrateFallbackElement: <HydrateFallback />,
       },
       {
         path: "/admin/dashboard/restaurant/:restaurantID",
         element: <AdminRestaurantDetails />,
+        loader: adminLoader,
+        hydrateFallbackElement: <HydrateFallback />,
+      },
+      {
+        path: "/admin/dashboard/restaurant/:restaurantID",
+        element: <AdminRestaurantDetails />,
+        loader: adminLoader,
+        hydrateFallbackElement: <HydrateFallback />,
+      },
+      {
+        path: "/admin/dashboard/reviews",
+        element: <AdminReviews />,
+        loader: adminLoader,
         hydrateFallbackElement: <HydrateFallback />,
       },
       {
@@ -139,6 +163,12 @@ const router = createBrowserRouter([
       {
         path: "/restaurant/dashboard/menu/create",
         element: <AddMenu />,
+        loader: restaurantrLoader,
+        hydrateFallbackElement: <HydrateFallback />,
+      },
+      {
+        path: "/restaurant/dashboard/:slugID/review",
+        element: <RestaurantReview />,
         loader: restaurantrLoader,
         hydrateFallbackElement: <HydrateFallback />,
       },
@@ -190,6 +220,10 @@ const router = createBrowserRouter([
   {
     path: "/login",
     element: <Login />,
+  },
+  {
+    path: "/reset-password",
+    element: <ForgotPassword />,
   },
   {
     path: "/404",

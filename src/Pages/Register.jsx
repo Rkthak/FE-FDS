@@ -11,37 +11,74 @@ const Register = () => {
     email: "",
     password: "",
   });
+  const [acceptedTerms, setAcceptedTerms] = useState(false);
 
   const navigate = useNavigate();
 
   const handleRegister = async (e) => {
     e.preventDefault();
 
-    if (formData.password.length < 6) {
-      toast.error("Password must be at least 6 characters long");
+    const userName = formData.userName.trim();
+    const email = formData.email.trim().toLowerCase();
+    const password = formData.password;
+
+    // term applied
+    if (!acceptedTerms) {
+      toast.error("Please agree to the Terms & Conditions and Privacy Policy.");
       return;
     }
-    if (formData.userName.length < 3) {
-      toast.error("User name must be at least 3 characters long");
+
+    // Username validation
+    if (!userName) {
+      toast.error("Please enter your name");
+      return;
+    }
+
+    if (userName.length < 3) {
+      toast.error("Name must be at least 3 characters long");
+      return;
+    }
+
+    // Email validation
+    if (!email) {
+      toast.error("Please enter your email address");
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!emailRegex.test(email)) {
+      toast.error("Please enter a valid email address");
+      return;
+    }
+
+    // Password validation
+    if (!password) {
+      toast.error("Please enter a password");
+      return;
+    }
+
+    if (password.length < 6) {
+      toast.error("Password must be at least 6 characters long");
       return;
     }
 
     try {
       const userData = {
-        userName: formData.userName,
-        email: formData.email.toLowerCase(),
-        password: formData.password,
+        userName,
+        email,
+        password,
       };
 
       const response = await registerUser(userData);
-      toast.success(response.message);
 
+      toast.success(response.message);
       navigate("/login");
     } catch (error) {
       const errorMessage =
         error.response?.data?.message ||
         error.message ||
-        "Registration failed. Please try again...";
+        "Registration failed. Please try again";
 
       toast.error(errorMessage);
     }
@@ -129,7 +166,11 @@ const Register = () => {
             </p>
 
             {/* ================= FORM ================= */}
-            <form className="mt-8 space-y-5" onSubmit={handleRegister}>
+            <form
+              className="mt-8 space-y-5"
+              onSubmit={handleRegister}
+              noValidate
+            >
               {/* Name */}
               <div>
                 <label className="mb-2 block font-body text-sm font-medium text-text-primary">
@@ -208,7 +249,8 @@ const Register = () => {
               <div className="flex items-start gap-3">
                 <input
                   type="checkbox"
-                  required
+                  checked={acceptedTerms}
+                  onChange={(e) => setAcceptedTerms(e.target.checked)}
                   className="mt-1 accent-primary-500"
                 />
 

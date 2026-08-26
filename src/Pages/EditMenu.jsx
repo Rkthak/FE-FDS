@@ -65,8 +65,6 @@ const EditMenu = () => {
 
         setImagePreview(getImageUrl(response.image) || "");
       } catch (error) {
-        console.error(error);
-
         setError(error.response?.data?.message || "Unable to load menu.");
       } finally {
         setLoading(false);
@@ -225,6 +223,7 @@ const EditMenu = () => {
       toast.error(error);
 
       setError(error.response?.data?.message || "Unable to update menu.");
+      toast.error(error.response?.data?.message || "Unable to update menu.");
     } finally {
       setSaving(false);
     }

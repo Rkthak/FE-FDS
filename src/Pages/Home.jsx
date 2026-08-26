@@ -14,6 +14,7 @@ const categoryIcons = {
   dosa: "  ",
   sandwich: " 🥪 ",
   desserts: "🍰",
+  cake: "🍰",
   drinks: "🥤",
   snacks: "🍟",
   default: "🍽️",

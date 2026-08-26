@@ -4,7 +4,7 @@ export const baseURL = "https://be-fds.onrender.com/api/v1";
 
 const protectedInstance = axios.create({
   baseURL: baseURL,
-  timeout: 10000,
+  timeout: 30000,
   timeoutErrorMessage: "request time out passes, try again later",
   withCredentials: true,
 });

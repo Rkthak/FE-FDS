@@ -34,3 +34,18 @@ export const deleteRestaurant = async (restaurantID) => {
   );
   return response.data;
 };
+
+// ==================== REVIEWS ====================
+
+export const getAllReviews = async () => {
+  const response = await protectedInstance.get("/admin/review");
+  return response.data;
+};
+
+export const moderateReview = async (reviewId, data) => {
+  const response = await protectedInstance.patch(
+    `/admin/review/${reviewId}/moderate`,
+    data,
+  );
+  return response.data;
+};
