@@ -18,11 +18,17 @@ const Navbar = () => {
 
   const displayCartCount = cartCount > 9 ? "9+" : cartCount;
 
+  const isCustomer = user?.role === "user";
+  const isAdmin = user?.role === "admin";
+  const isRestaurant = user?.role === "restaurant";
+
   const handleLogout = async () => {
     try {
       await logoutUser();
 
       dispatch(clearUser());
+      setUserDropdownOpen(false);
+
       toast.success("Logged out successfully");
 
       navigate("/");
@@ -30,7 +36,7 @@ const Navbar = () => {
       const errorMessage =
         error.response?.data?.message ||
         error.message ||
-        "Registration failed. Please try again...";
+        "Logout failed. Please try again.";
 
       toast.error(errorMessage);
     }
@@ -41,28 +47,34 @@ const Navbar = () => {
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
         {/* ================= LOGO ================= */}
         <Link to="/" className="shrink-0">
-          <h1 className="font-logo text-3xl font-black tracking-tight text-primary-500 mr-4">
+          <h1 className="mr-4 font-logo text-3xl font-black tracking-tight text-primary-500">
             Food<span className="text-secondary-500">Rush</span>
           </h1>
         </Link>
 
         {/* ================= DESKTOP NAV ================= */}
         <div className="hidden items-center gap-8 md:flex">
-          <Link
-            to="/"
-            className="font-body text-sm font-semibold text-text-primary transition hover:text-primary-500"
-          >
-            Home
-          </Link>
+          {/* Customer / Guest Public Navigation */}
+          {(!isAuthenticated || isCustomer) && (
+            <>
+              <Link
+                to="/"
+                className="font-body text-sm font-semibold text-text-primary transition hover:text-primary-500"
+              >
+                Home
+              </Link>
 
-          <Link
-            to="/restaurants"
-            className="font-body text-sm font-semibold text-text-primary transition hover:text-primary-500"
-          >
-            Restaurants
-          </Link>
+              <Link
+                to="/restaurants"
+                className="font-body text-sm font-semibold text-text-primary transition hover:text-primary-500"
+              >
+                Restaurants
+              </Link>
+            </>
+          )}
 
-          {user ? (
+          {/* Customer Only */}
+          {isCustomer && (
             <>
               <Link
                 to="/favorites"
@@ -70,6 +82,7 @@ const Navbar = () => {
               >
                 Favorites
               </Link>
+
               <Link
                 to="/orders"
                 className="font-body text-sm font-semibold text-text-primary transition hover:text-primary-500"
@@ -77,46 +90,50 @@ const Navbar = () => {
                 My Orders
               </Link>
             </>
-          ) : (
-            <>
-              <Link
-                to="/restaurant-register"
-                className="font-body text-sm font-semibold text-text-primary transition hover:text-primary-500"
-              >
-                Register Your Restaurant
-              </Link>
-            </>
+          )}
+
+          {/* Guest Only */}
+          {!isAuthenticated && (
+            <Link
+              to="/restaurant-register"
+              className="font-body text-sm font-semibold text-text-primary transition hover:text-primary-500"
+            >
+              Register Your Restaurant
+            </Link>
           )}
         </div>
 
         {/* ================= RIGHT SIDE ================= */}
         <div className="flex items-center gap-3">
-          {/* Search */}
-          <button
-            type="button"
-            className="hidden h-10 w-10 items-center justify-center rounded-xl border border-border bg-background text-lg transition hover:border-primary-500 hover:text-primary-500 sm:flex"
-            onClick={() => navigate("/restaurants")}
-          >
-            🔍
-          </button>
+          {/* Search - Guest + Customer */}
+          {(!isAuthenticated || isCustomer) && (
+            <button
+              type="button"
+              className="hidden h-10 w-10 items-center justify-center rounded-xl border border-border bg-background text-lg transition hover:border-primary-500 hover:text-primary-500 sm:flex"
+              onClick={() => navigate("/restaurants")}
+            >
+              🔍
+            </button>
+          )}
 
-          {/* Cart */}
-          <button
-            type="button"
-            onClick={() => navigate("/cart")}
-            className="relative flex h-10 w-10 items-center justify-center rounded-xl border border-border bg-background text-lg transition hover:border-primary-500 hover:text-primary-500"
-          >
-            🛒
-            {cartCount > 0 && (
-              <span className="absolute -right-2.5 -top-3 flex h-6 min-w-6 items-center justify-center rounded-full bg-primary-500 px-1.5 text-xs font-bold text-white">
-                {displayCartCount}
-              </span>
-            )}
-          </button>
+          {/* Cart - Customer Only */}
+          {isCustomer && (
+            <button
+              type="button"
+              onClick={() => navigate("/cart")}
+              className="relative flex h-10 w-10 items-center justify-center rounded-xl border border-border bg-background text-lg transition hover:border-primary-500 hover:text-primary-500"
+            >
+              🛒
+              {cartCount > 0 && (
+                <span className="absolute -right-2.5 -top-3 flex h-6 min-w-6 items-center justify-center rounded-full bg-primary-500 px-1.5 text-xs font-bold text-white">
+                  {displayCartCount}
+                </span>
+              )}
+            </button>
+          )}
 
           {/* ================= AUTH ================= */}
           {isAuthenticated ? (
-            /* ================= USER DROPDOWN ================= */
             <div className="group relative">
               {/* User Button */}
               <button
@@ -146,7 +163,11 @@ const Navbar = () => {
 
               {/* ================= DROPDOWN ================= */}
               <div
-                className={`absolute right-0 top-full z-50 mt-2 w-56 translate-y-2 rounded-2xl border border-border bg-surface p-2    opacity-0 shadow-xl transition-all duration-200 lg:group-hover:visible lg:group-hover:translate-y-0 lg:group-hover:opacity-100 ${userDropdownOpen ? "visible translate-y-0 opacity-100" : "invisible"}`}
+                className={`absolute right-0 top-full z-50 mt-2 w-56 translate-y-2 rounded-2xl border border-border bg-surface p-2 opacity-0 shadow-xl transition-all duration-200 lg:group-hover:visible lg:group-hover:translate-y-0 lg:group-hover:opacity-100 ${
+                  userDropdownOpen
+                    ? "visible translate-y-0 opacity-100"
+                    : "invisible"
+                }`}
               >
                 {/* User Info */}
                 <div className="border-b border-border px-3 py-3">
@@ -159,10 +180,11 @@ const Navbar = () => {
                   </p>
                 </div>
 
-                {/* dashboard */}
-                {user?.role === "admin" && (
+                {/* ================= ADMIN DASHBOARD ================= */}
+                {isAdmin && (
                   <Link
                     to="/admin/dashboard"
+                    onClick={() => setUserDropdownOpen(false)}
                     className="mt-2 flex items-center gap-3 rounded-xl px-3 py-2.5 font-body text-sm font-medium text-text-primary transition hover:bg-primary-50 hover:text-primary-500"
                   >
                     <span className="text-lg">⚙️</span>
@@ -170,41 +192,64 @@ const Navbar = () => {
                   </Link>
                 )}
 
-                {user?.role === "restaurant" && (
+                {/* ================= RESTAURANT DASHBOARD ================= */}
+                {isRestaurant && (
                   <Link
                     to="/restaurant/dashboard"
+                    onClick={() => setUserDropdownOpen(false)}
                     className="mt-2 flex items-center gap-3 rounded-xl px-3 py-2.5 font-body text-sm font-medium text-text-primary transition hover:bg-primary-50 hover:text-primary-500"
                   >
                     <span className="text-lg">🏨</span>
                     Dashboard
                   </Link>
                 )}
-                {/* Edit Profile */}
-                <Link
-                  to="/profile"
-                  className="mt-2 flex items-center gap-3 rounded-xl px-3 py-2.5 font-body text-sm font-medium text-text-primary transition hover:bg-primary-50 hover:text-primary-500"
-                >
-                  <span className="text-lg">👤</span>
-                  My Profile
-                </Link>
 
-                {/* My Orders */}
-                <Link
-                  to="/orders"
-                  className="flex items-center gap-3 rounded-xl px-3 py-2.5 font-body text-sm font-medium text-text-primary transition hover:bg-primary-50 hover:text-primary-500"
-                >
-                  <span className="text-lg">📦</span>
-                  My Orders
-                </Link>
+                {/* ================= CUSTOMER ONLY ================= */}
+                {isCustomer && (
+                  <>
+                    {/* Profile */}
+                    <Link
+                      to="/profile"
+                      onClick={() => setUserDropdownOpen(false)}
+                      className="mt-2 flex items-center gap-3 rounded-xl px-3 py-2.5 font-body text-sm font-medium text-text-primary transition hover:bg-primary-50 hover:text-primary-500"
+                    >
+                      <span className="text-lg">👤</span>
+                      My Profile
+                    </Link>
 
-                {/* Favorites */}
-                <Link
-                  to="/favorites"
-                  className="flex items-center gap-3 rounded-xl px-3 py-2.5 font-body text-sm font-medium text-text-primary transition hover:bg-primary-50 hover:text-primary-500"
-                >
-                  <span className="text-lg">❤️</span>
-                  Favorites
-                </Link>
+                    {/* Orders */}
+                    <Link
+                      to="/orders"
+                      onClick={() => setUserDropdownOpen(false)}
+                      className="flex items-center gap-3 rounded-xl px-3 py-2.5 font-body text-sm font-medium text-text-primary transition hover:bg-primary-50 hover:text-primary-500"
+                    >
+                      <span className="text-lg">📦</span>
+                      My Orders
+                    </Link>
+
+                    {/* Favorites */}
+                    <Link
+                      to="/favorites"
+                      onClick={() => setUserDropdownOpen(false)}
+                      className="flex items-center gap-3 rounded-xl px-3 py-2.5 font-body text-sm font-medium text-text-primary transition hover:bg-primary-50 hover:text-primary-500"
+                    >
+                      <span className="text-lg">❤️</span>
+                      Favorites
+                    </Link>
+                  </>
+                )}
+
+                {/* Restaurant/Admin Profile */}
+                {(isAdmin || isRestaurant) && (
+                  <Link
+                    to="/profile"
+                    onClick={() => setUserDropdownOpen(false)}
+                    className="mt-2 flex items-center gap-3 rounded-xl px-3 py-2.5 font-body text-sm font-medium text-text-primary transition hover:bg-primary-50 hover:text-primary-500"
+                  >
+                    <span className="text-lg">👤</span>
+                    My Profile
+                  </Link>
+                )}
 
                 {/* Divider */}
                 <div className="my-2 border-t border-border" />
@@ -244,49 +289,57 @@ const Navbar = () => {
       {/* ================= MOBILE NAV ================= */}
       <div className="border-t border-border md:hidden">
         <div className="mx-auto flex max-w-7xl items-center justify-around px-3 py-3">
-          <Link
-            to="/"
-            className="text-xs font-semibold text-text-secondary hover:text-primary-500"
-          >
-            🏠
-            <span className="ml-1">Home</span>
-          </Link>
+          {/* Guest + Customer */}
+          {(!isAuthenticated || isCustomer) && (
+            <>
+              <Link
+                to="/"
+                className="text-xs font-semibold text-text-secondary hover:text-primary-500"
+              >
+                🏠
+                <span className="ml-1">Home</span>
+              </Link>
 
-          <Link
-            to="/restaurants"
-            className="text-xs font-semibold text-text-secondary hover:text-primary-500"
-          >
-            🍽️
-            <span className="ml-1">Restaurants</span>
-          </Link>
+              <Link
+                to="/restaurants"
+                className="text-xs font-semibold text-text-secondary hover:text-primary-500"
+              >
+                🍽️
+                <span className="ml-1">Restaurants</span>
+              </Link>
+            </>
+          )}
 
-          {user ? (
+          {/* Customer Only */}
+          {isCustomer && (
             <>
               <Link
                 to="/favorites"
                 className="text-xs font-semibold text-text-secondary hover:text-primary-500"
               >
-                🍽️
+                ❤️
                 <span className="ml-1">Favorites</span>
               </Link>
+
               <Link
                 to="/orders"
                 className="text-xs font-semibold text-text-secondary hover:text-primary-500"
               >
-                🍽️
+                📦
                 <span className="ml-1">My Orders</span>
               </Link>
             </>
-          ) : (
-            <>
-              <Link
-                to="/restaurant-register"
-                className="text-xs font-semibold text-text-secondary hover:text-primary-500"
-              >
-                🏨
-                <span className="ml-1">Register Your Restaurant</span>
-              </Link>
-            </>
+          )}
+
+          {/* Guest Only */}
+          {!isAuthenticated && (
+            <Link
+              to="/restaurant-register"
+              className="text-xs font-semibold text-text-secondary hover:text-primary-500"
+            >
+              🏨
+              <span className="ml-1">Register Your Restaurant</span>
+            </Link>
           )}
         </div>
       </div>

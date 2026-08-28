@@ -10,41 +10,28 @@ import { toast } from "react-toastify";
 import { getImageUrl } from "../Services/helper";
 import { useNavigate } from "react-router";
 import { getMyRestaurantApplication } from "../Services/restaurant";
-import socket from "../socket";
 
 const Profile = () => {
   const { user } = useSelector((state) => state.auth);
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const [saving, setSaving] = useState(false);
+  const [deleting, setDeleting] = useState(false);
   const [restaurantApplication, setRestaurantApplication] = useState(null);
-  const [restaurant, setRestaurant] = useState(null);
 
+  // Customer-only sections
+  const isCustomer = user?.role === "user";
+
+  // ================= RESTAURANT APPLICATION =================
   useEffect(() => {
-    if (!restaurant?._id) return;
+    // Restaurant application is relevant only for
+    // user / restaurant roles
+    if (!user || !["user", "restaurant"].includes(user.role)) {
+      return;
+    }
 
-    socket.connect();
-
-    socket.emit("join:restaurant", restaurant._id);
-
-    const handleStatusUpdate = (data) => {
-      setRestaurant((prev) => ({
-        ...prev,
-        status: data.status,
-        rejectionReason: data.rejectionReason,
-      }));
-    };
-
-    socket.on("restaurant:status:update", handleStatusUpdate);
-
-    return () => {
-      socket.off("restaurant:status:update", handleStatusUpdate);
-      socket.disconnect();
-    };
-  }, [restaurant?._id]);
-
-  useEffect(() => {
     const fetchRestaurantApplication = async () => {
       try {
         const response = await getMyRestaurantApplication();
@@ -52,14 +39,18 @@ const Profile = () => {
         setRestaurantApplication(response.restaurant);
       } catch (error) {
         if (error.response?.status !== 404) {
-          toast.error(error);
+          toast.error(
+            error.response?.data?.message ||
+              "Failed to load restaurant application",
+          );
         }
       }
     };
 
     fetchRestaurantApplication();
-  }, []);
+  }, [user]);
 
+  // ================= FORM DATA =================
   const [formData, setFormData] = useState({
     userName: user?.userName || "",
     email: user?.email || "",
@@ -72,10 +63,12 @@ const Profile = () => {
   });
 
   const [selectedImage, setSelectedImage] = useState(null);
+
   const [profileImage, setProfileImage] = useState(
-    user?.profileImage ? getImageUrl(user?.profileImage) : "",
+    user?.profileImage ? getImageUrl(user.profileImage) : "",
   );
 
+  // ================= INPUT CHANGE =================
   const handleChange = (e) => {
     const { name, value } = e.target;
 
@@ -85,6 +78,7 @@ const Profile = () => {
     }));
   };
 
+  // ================= PROFILE IMAGE =================
   const handleImageChange = (e) => {
     const file = e.target.files[0];
 
@@ -97,6 +91,7 @@ const Profile = () => {
     setProfileImage(imageUrl);
   };
 
+  // ================= UPDATE PROFILE =================
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -160,14 +155,14 @@ const Profile = () => {
 
       let updatedUser = profileResponse.user;
 
-      // 2️⃣ Profile image upload
+      // Profile image upload
       if (selectedImage) {
         const imageResponse = await updateProfilePicture(selectedImage);
 
         updatedUser = imageResponse.user;
       }
 
-      // 3️⃣ Redux update
+      // Redux update
       dispatch(setUser(updatedUser));
 
       toast.success("Profile updated successfully");
@@ -178,10 +173,7 @@ const Profile = () => {
     }
   };
 
-  const navigate = useNavigate();
-
-  const [deleting, setDeleting] = useState(false);
-
+  // ================= DELETE PROFILE =================
   const handleDeleteProfile = async () => {
     const confirmDelete = window.confirm(
       "Are you sure you want to delete your account? This action cannot be undone.",
@@ -194,12 +186,10 @@ const Profile = () => {
 
       const response = await deleteProfile();
 
-      // Redux se user remove
       dispatch(clearUser());
 
       toast.success(response.message || "Account deleted successfully");
 
-      // Login page par bhejo
       navigate("/register");
     } catch (error) {
       toast.error(error.response?.data?.message || "Failed to delete account");
@@ -228,7 +218,7 @@ const Profile = () => {
 
         {/* ================= PROFILE CARD ================= */}
         <div className="overflow-hidden rounded-3xl border border-border bg-surface shadow-sm">
-          {/* Top Banner */}
+          {/* Banner */}
           <div className="h-32 bg-linear-to-r from-primary-500 to-secondary-500 sm:h-40" />
 
           <div className="px-5 pb-8 sm:px-8">
@@ -269,7 +259,7 @@ const Profile = () => {
               {/* User Name */}
               <div className="pb-2">
                 <h2 className="font-logo text-2xl font-black text-text-primary">
-                  {user?.userName.toUpperCase() || "User"}
+                  {user?.userName?.toUpperCase() || "USER"}
                 </h2>
 
                 <p className="mt-1 font-body text-sm text-text-secondary">
@@ -337,7 +327,6 @@ const Profile = () => {
 
             {/* ================= FORM ================= */}
             <form onSubmit={handleSubmit} className="mt-8" noValidate>
-              {/* Personal Information */}
               <div>
                 <h3 className="font-logo text-xl font-black text-text-primary">
                   Personal Information
@@ -375,9 +364,8 @@ const Profile = () => {
                     type="email"
                     name="email"
                     value={formData.email}
-                    onChange={handleChange}
-                    placeholder="Enter email"
-                    className="w-full rounded-xl border border-border bg-background px-4 py-3 font-body text-text-primary outline-none transition placeholder:text-text-muted focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10"
+                    disabled
+                    className="w-full cursor-not-allowed rounded-xl border border-border bg-gray-100 px-4 py-3 font-body text-text-secondary outline-none"
                   />
                 </div>
 
@@ -402,7 +390,7 @@ const Profile = () => {
                   />
                 </div>
 
-                {/* Role - Read Only */}
+                {/* Role */}
                 <div>
                   <label className="mb-2 block font-body text-sm font-semibold text-text-primary">
                     Role
@@ -496,7 +484,6 @@ const Profile = () => {
                       placeholder="Pincode"
                       required
                       maxLength={6}
-                      pattern="[0-9]+"
                       className="w-full rounded-xl border border-border bg-background px-4 py-3 font-body text-text-primary outline-none transition placeholder:text-text-muted focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10"
                     />
                   </div>
@@ -536,33 +523,45 @@ const Profile = () => {
           </div>
         </div>
 
-        {/* PAYMENTS SECTION */}
-        <div className="mt-8 rounded-2xl border border-border bg-surface p-5 shadow-sm">
-          <div className="flex items-center justify-between">
-            <div>
-              <h2 className="font-heading text-lg font-semibold text-text-primary">
-                Payment History
-              </h2>
+        {/* ================================================= */}
+        {/* CUSTOMER ONLY SECTIONS */}
+        {/* ================================================= */}
 
-              <p className="mt-1 text-sm text-text-secondary">
-                View your previous payments and transactions.
-              </p>
+        {isCustomer && (
+          <>
+            {/* ================= PAYMENTS ================= */}
+            <div className="mt-8 rounded-2xl border border-border bg-surface p-5 shadow-sm">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h2 className="font-heading text-lg font-semibold text-text-primary">
+                    Payment History
+                  </h2>
+
+                  <p className="mt-1 text-sm text-text-secondary">
+                    View your previous payments and transactions.
+                  </p>
+                </div>
+
+                <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary-100 text-xl">
+                  💳
+                </div>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => navigate("/payment-history")}
+                className="mt-4 rounded-xl bg-primary-500 px-5 py-2.5 text-sm font-semibold text-text-white transition hover:bg-primary-600"
+              >
+                View Payment History →
+              </button>
             </div>
+          </>
+        )}
 
-            <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary-100 text-xl">
-              💳
-            </div>
-          </div>
+        {/* ================================================= */}
+        {/* RESTAURANT APPLICATION */}
+        {/* ================================================= */}
 
-          <button
-            onClick={() => navigate("/payment-history")}
-            className="mt-4 rounded-xl bg-primary-500 px-5 py-2.5 text-sm font-semibold text-text-white transition hover:bg-primary-600"
-          >
-            View Payment History →
-          </button>
-        </div>
-
-        {/* MY RESTAURANT APPLICATION */}
         {restaurantApplication && (
           <div className="mt-8 rounded-2xl border border-border bg-surface p-5 shadow-sm">
             <div className="flex items-start justify-between gap-4">
@@ -615,11 +614,19 @@ const Profile = () => {
                     Reason: {restaurantApplication.rejectionReason}
                   </p>
                 )}
+
+                <button
+                  type="button"
+                  onClick={() => navigate("/restaurant-reapply")}
+                  className="mt-4 rounded-xl bg-primary-500 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-primary-600"
+                >
+                  Edit & Reapply →
+                </button>
               </div>
             )}
 
             {/* Approved */}
-            {restaurantApplication?.status === "approved" && (
+            {restaurantApplication.status === "approved" && (
               <div className="mt-4">
                 <p className="text-sm text-success">
                   🎉 Your restaurant has been approved.
@@ -636,29 +643,11 @@ const Profile = () => {
             )}
           </div>
         )}
-        {restaurantApplication?.status === "rejected" && (
-          <div className="mt-4 rounded-xl bg-red-50 p-4">
-            <p className="text-sm font-semibold text-red-600">
-              Application Rejected
-            </p>
 
-            {restaurantApplication.rejectionReason && (
-              <p className="mt-1 text-sm text-red-500">
-                Reason: {restaurantApplication.rejectionReason}
-              </p>
-            )}
+        {/* ================================================= */}
+        {/* DELETE PROFILE */}
+        {/* ================================================= */}
 
-            <button
-              type="button"
-              onClick={() => navigate("/restaurant-reapply")}
-              className="mt-4 rounded-xl bg-primary-500 px-5 py-2.5 text-sm font-semibold text-white hover:bg-primary-600"
-            >
-              Edit & Reapply →
-            </button>
-          </div>
-        )}
-
-        {/*DELETE PROFILE  */}
         <div className="mt-10 rounded-2xl border border-red-200 bg-red-50 p-6">
           <h3 className="font-heading text-lg font-bold text-red-600">
             Danger Zone
@@ -675,7 +664,7 @@ const Profile = () => {
             disabled={deleting}
             className="mt-4 rounded-xl bg-red-600 px-5 py-2.5 font-body text-sm font-semibold text-white transition hover:bg-red-700"
           >
-            Delete Account
+            {deleting ? "Deleting..." : "Delete Account"}
           </button>
         </div>
       </div>
