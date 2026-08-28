@@ -9,7 +9,11 @@ import authInitLoader from "./Loaders/authInitLoader";
 import MainLayout from "./Layout/MainLayout";
 import UserProfile from "./Pages/UserProfile";
 import authLoader from "./Loaders/authLoader";
-import { adminLoader, restaurantrLoader } from "./Loaders/roleLoader";
+import {
+  adminLoader,
+  restaurantrLoader,
+  userLoader,
+} from "./Loaders/roleLoader";
 import AdminDashboard from "./Pages/AdminDashboard";
 import RestaurantDashboard from "./Pages/RestaurantDashboard";
 import RestaurantDetails from "./Pages/RestaurantDetails";
@@ -44,12 +48,12 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <MainLayout />,
-    loader: authInitLoader,
     hydrateFallbackElement: <HydrateFallback />,
     children: [
       {
         index: true,
         element: <Home />,
+        loader: authInitLoader,
         hydrateFallbackElement: <HydrateFallback />,
       },
       {
@@ -61,37 +65,37 @@ const router = createBrowserRouter([
       {
         path: "/cart",
         element: <Cart />,
-        loader: authLoader,
+        loader: userLoader,
         hydrateFallbackElement: <HydrateFallback />,
       },
       {
         path: "/favorites",
         element: <Favorites />,
-        loader: authLoader,
+        loader: userLoader,
         hydrateFallbackElement: <HydrateFallback />,
       },
       {
         path: "/orders",
         element: <MyOrders />,
-        loader: authLoader,
+        loader: userLoader,
         hydrateFallbackElement: <HydrateFallback />,
       },
       {
         path: "/order/:orderID",
         element: <OrderDetails />,
-        loader: authLoader,
+        loader: userLoader,
         hydrateFallbackElement: <HydrateFallback />,
       },
       {
         path: "/checkout",
         element: <Checkout />,
-        loader: authLoader,
+        loader: userLoader,
         hydrateFallbackElement: <HydrateFallback />,
       },
       {
         path: "/payment-history",
         element: <PaymentHistory />,
-        loader: authLoader,
+        loader: userLoader,
         hydrateFallbackElement: <HydrateFallback />,
       },
       {
@@ -182,21 +186,25 @@ const router = createBrowserRouter([
       {
         path: "/restaurants",
         element: <GetAllRestaurants />,
+        loader: authInitLoader,
         hydrateFallbackElement: <HydrateFallback />,
       },
       {
         path: "/restaurant/:slugID",
         element: <RestaurantDetails />,
+        loader: authInitLoader,
         hydrateFallbackElement: <HydrateFallback />,
       },
       {
         path: "/menu",
         element: <AllMenus />,
+        loader: authInitLoader,
         hydrateFallbackElement: <HydrateFallback />,
       },
       {
         path: "/menu/:menuID",
         element: <MenuDetails />,
+        loader: authInitLoader,
         hydrateFallbackElement: <HydrateFallback />,
       },
       {
