@@ -13,6 +13,10 @@ const AdminDashboard = () => {
   const [newRestaurantNotification, setNewRestaurantNotification] =
     useState(null);
 
+  // ================= SIDEBAR =================
+
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
   useEffect(() => {
     socket.connect();
 
@@ -23,6 +27,7 @@ const AdminDashboard = () => {
 
       setNewRestaurantNotification(data.restaurant);
     });
+
     return () => {
       socket.off("restaurant:application:new");
       socket.disconnect();
@@ -82,6 +87,13 @@ const AdminDashboard = () => {
     return "bg-yellow-50 text-yellow-700";
   };
 
+  // ================= NAVIGATION =================
+
+  const handleNavigation = (path) => {
+    setSidebarOpen(false);
+    navigate(path);
+  };
+
   // ================= LOADING =================
 
   if (loading) {
@@ -97,30 +109,60 @@ const AdminDashboard = () => {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50">
-      {/* ================= SIDEBAR ================= */}
+    <div className="min-h-screen bg-surface/95">
+      {/* ================= MOBILE OVERLAY ================= */}
 
-      <aside className="fixed left-0 top-0 bottom-0 w-64 bg-white border-r border-slate-200 hidden lg:block">
+      {sidebarOpen && (
+        <div
+          className="fixed inset-0 bg-black/40 z-40 lg:hidden"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
+
+      {/* ================= DESKTOP + MOBILE SIDEBAR ================= */}
+
+      <aside
+        className={`
+          fixed left-0 top-20 bottom-0 z-50
+          w-64 bg-white border-r border-slate-200
+          transform transition-transform duration-300
+          lg:translate-x-0
+          ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}
+        `}
+      >
         {/* Logo */}
 
-        <div className="h-20 flex items-center px-6 border-b border-slate-200">
+        <div className="h-20 flex items-center justify-between px-6 border-b border-slate-200">
           <div>
             <h1 className="text-xl font-bold text-slate-800">FoodDelivery</h1>
 
             <p className="text-xs text-slate-400 mt-1">Admin Panel</p>
           </div>
+
+          {/* Close button - Mobile/Tablet */}
+
+          <button
+            onClick={() => setSidebarOpen(false)}
+            className="lg:hidden w-9 h-9 rounded-lg flex items-center justify-center text-slate-500 hover:bg-slate-100 text-xl"
+            aria-label="Close sidebar"
+          >
+            X
+          </button>
         </div>
 
         {/* Navigation */}
 
         <nav className="p-4 space-y-2">
-          <button className="w-full flex items-center gap-3 px-4 py-3 rounded-xl bg-orange-50 text-orange-600 font-semibold text-sm">
+          <button
+            onClick={() => handleNavigation("/admin/dashboard")}
+            className="w-full flex items-center gap-3 px-4 py-3 rounded-xl bg-orange-50 text-orange-600 font-semibold text-sm"
+          >
             <span>📊</span>
             Dashboard
           </button>
 
           <button
-            onClick={() => navigate("/admin/dashboard/restaurant")}
+            onClick={() => handleNavigation("/admin/dashboard/restaurant")}
             className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 hover:bg-slate-50 transition font-medium text-sm"
           >
             <span>🍽️</span>
@@ -128,7 +170,7 @@ const AdminDashboard = () => {
           </button>
 
           <button
-            onClick={() => navigate("/admin/dashboard/reviews")}
+            onClick={() => handleNavigation("/admin/dashboard/reviews")}
             className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 hover:bg-slate-50 transition font-medium text-sm"
           >
             <span>⭐</span>
@@ -142,17 +184,33 @@ const AdminDashboard = () => {
       <div className="lg:ml-64">
         {/* ================= HEADER ================= */}
 
-        <header className="h-20 bg-white border-b border-slate-200 sticky top-0 z-20">
+        <header className="h-20 bg-white border-b border-slate-200 sticky top-0 z-30">
           <div className="h-full px-4 sm:px-6 lg:px-8 flex items-center justify-between">
-            <div>
-              <h2 className="text-xl sm:text-2xl font-bold text-slate-800">
-                Dashboard
-              </h2>
+            {/* Left side */}
 
-              <p className="text-sm text-slate-500 mt-1">
-                Manage your restaurant platform
-              </p>
+            <div className="flex items-center gap-3 min-w-0">
+              {/* Hamburger - Mobile/Tablet */}
+
+              <button
+                onClick={() => setSidebarOpen(true)}
+                className="lg:hidden w-10 h-10 rounded-xl bg-slate-50 hover:bg-slate-100 flex items-center justify-center text-slate-700 text-xl shrink-0"
+                aria-label="Open sidebar"
+              >
+                ☰
+              </button>
+
+              <div className="min-w-0">
+                <h2 className="text-xl sm:text-2xl font-bold text-slate-800 truncate">
+                  Dashboard
+                </h2>
+
+                <p className="text-sm text-slate-500 mt-1 hidden sm:block">
+                  Manage your restaurant platform
+                </p>
+              </div>
             </div>
+
+            {/* Right side */}
 
             <div className="flex items-center gap-3">
               {newRestaurantNotification && (
