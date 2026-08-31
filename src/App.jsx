@@ -210,13 +210,13 @@ const router = createBrowserRouter([
       {
         path: "/restaurant-register",
         element: <RestaurantRegister />,
-        loader: authLoader,
+        loader: userLoader,
         hydrateFallbackElement: <HydrateFallback />,
       },
       {
         path: "/restaurant-reapply",
         element: <ReApplyRestaurant />,
-        loader: authLoader,
+        loader: userLoader,
         hydrateFallbackElement: <HydrateFallback />,
       },
     ],

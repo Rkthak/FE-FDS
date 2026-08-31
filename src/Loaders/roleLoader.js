@@ -3,7 +3,7 @@ import { clearUser, setUser } from "../Redux/authSlice";
 import { getMe } from "../Services/authService";
 import store from "../Redux/store";
 
-export const userLoader = async () => {
+export const userLoader = async ({ request }) => {
   try {
     const response = await getMe();
     const user = response.user;
@@ -24,7 +24,9 @@ export const userLoader = async () => {
   } catch (error) {
     console.error("User loader error:", error);
     store.dispatch(clearUser());
-    return redirect("/login");
+    return redirect(
+      `/login?redirect=${encodeURIComponent(new URL(request.url).pathname)}`,
+    );
   }
 };
 
