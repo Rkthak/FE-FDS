@@ -14,6 +14,7 @@ const Login = () => {
   });
 
   const navigate = useNavigate();
+  const redirect = new URLSearchParams(window.location.search).get("redirect");
   const dispatch = useDispatch();
 
   const handleLogin = async (e) => {
@@ -30,7 +31,7 @@ const Login = () => {
 
       dispatch(setUser(response.user));
 
-      navigate("/");
+      navigate(redirect || "/");
     } catch (error) {
       const errorMessage =
         error.response?.data?.message ||
