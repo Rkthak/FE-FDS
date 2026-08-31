@@ -946,7 +946,7 @@ const RestaurantRegister = () => {
         <div className="bg-white border border-slate-200 rounded-2xl p-6 mb-6">
           <button
             type="button"
-            onClick={() => navigate(-1)}
+            onClick={() => navigate("/")}
             className="text-sm text-slate-500 hover:text-slate-800 mb-4"
           >
             ← Back
