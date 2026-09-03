@@ -73,27 +73,8 @@ const Navbar = () => {
             </>
           )}
 
-          {/* Customer Only */}
-          {isCustomer && (
-            <>
-              <Link
-                to="/favorites"
-                className="font-body text-sm font-semibold text-text-primary transition hover:text-primary-500"
-              >
-                Favorites
-              </Link>
-
-              <Link
-                to="/orders"
-                className="font-body text-sm font-semibold text-text-primary transition hover:text-primary-500"
-              >
-                My Orders
-              </Link>
-            </>
-          )}
-
           {/* Guest Only */}
-          {!isAuthenticated && (
+          {(!isAuthenticated || isCustomer) && (
             <Link
               to="/restaurant-register"
               className="font-body text-sm font-semibold text-text-primary transition hover:text-primary-500"
@@ -310,29 +291,8 @@ const Navbar = () => {
             </>
           )}
 
-          {/* Customer Only */}
-          {isCustomer && (
-            <>
-              <Link
-                to="/favorites"
-                className="text-xs font-semibold text-text-secondary hover:text-primary-500"
-              >
-                ❤️
-                <span className="ml-1">Favorites</span>
-              </Link>
-
-              <Link
-                to="/orders"
-                className="text-xs font-semibold text-text-secondary hover:text-primary-500"
-              >
-                📦
-                <span className="ml-1">My Orders</span>
-              </Link>
-            </>
-          )}
-
           {/* Guest Only */}
-          {!isAuthenticated && (
+          {(!isAuthenticated || isCustomer) && (
             <Link
               to="/restaurant-register"
               className="text-xs font-semibold text-text-secondary hover:text-primary-500"
